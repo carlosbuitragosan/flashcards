@@ -1,5 +1,6 @@
 <?php
 
+// supabase password dyGDJvmcy8QwO0Tk
 require_once __DIR__ . '/../config.php';
 
 $API_URL = 'https://restcountries.com/v3.1/all?fields=name,capital,region';
