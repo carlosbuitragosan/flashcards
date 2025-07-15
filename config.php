@@ -7,12 +7,13 @@ $dotenv->safeLoad();
 
 function getPDO(): PDO
 {
+    $driver = $_ENV['DB_CONNECTION'];
     $host = $_ENV['DB_HOST'];
     $port = $_ENV['DB_PORT'];
     $dbName = $_ENV['DB_NAME'];
     $user = $_ENV['DB_USER'];
     $pass = $_ENV['DB_PASSWORD'];
-    $dsn = "pgsql:host=$host;port=$port;dbname=$dbName";
+    $dsn = "$driver:host=$host;port=$port;dbname=$dbName;charset=utf8mb4";
 
     try {
         $pdo = new PDO($dsn, $user, $pass);

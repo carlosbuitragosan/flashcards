@@ -46,7 +46,7 @@ foreach ($data as $country) {
         $stmt->execute([$name, $capital, $deckId]);
         $inserted++;
     } catch (PDOException $e) {
-        echo "Warning: " . $e->getMessage() . "\n";
+        echo "Skipped {$name}: " . $e->getMessage() . "\n";
         continue;
     }
 }
