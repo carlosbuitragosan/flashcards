@@ -16,5 +16,5 @@ export default function App() {
     <div>
       <h1>{country ? country : 'Loading...'}</h1>
     </div>
-  )
+  );
 }
