@@ -11,10 +11,10 @@ export default defineConfig({
   },
   build: {
     outDir: '../backend/public/build',
-    manifest: true,
     emptyOutDir: true,
+    manifest: 'manifest.json', 
     rollupOptions: {
-      input: 'src/main.jsx',
+    input: 'src/main.jsx',
     },
   },
   resolve: {
