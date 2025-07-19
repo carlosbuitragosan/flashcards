@@ -1,6 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\FlashcardController;
+use App\Http\Controllers\Api\FlashcardController;
 
-Route::get('/random-card', [FlashcardController::class, 'random']);
+Route::get('/flashcards', [FlashcardController::class, 'index']);
