@@ -29,8 +29,6 @@ Homestead.json
 Homestead.yaml
 Thumbs.db
 .ftp-deploy-sync.json
-../backend/public/assets
-/public/assets
 .env
 .env.*
 .vite
