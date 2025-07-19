@@ -3,10 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <title>Flashcards</title>
-  <link rel="stylesheet" href="{{ asset('assets/style.css') }}">
+  @vite(['resources/src/style.css', 'resources/src/main.jsx'])
 </head>
 <body>
   <div id="root"></div>
-  <script type="module" src="{{ asset('assets/main.js') }}"></script>
 </body>
 </html>

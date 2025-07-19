@@ -11,6 +11,7 @@ export default defineConfig({
   },
   build: {
     outDir: '../backend/public',
+    manifest: true,
     emptyOutDir: true,
     rollupOptions: {
       input: 'src/main.jsx',
