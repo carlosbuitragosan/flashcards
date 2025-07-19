@@ -1,13 +1,12 @@
-import axios from "axios";
+import axios from 'axios';
 
 // Get a random card
-export const fetchRandomCard = async () => {
-
+export const fetchAllFlashcards = async () => {
   try {
-    const response = await axios.get('/api/random-card')
-    return response.data
+    const response = await axios.get('/api/flashcards');
+    return response.data;
   } catch (error) {
-    console.error('Error fetching random  card: ', err)
-    throw error
+    console.error('Error fetching random  card: ', err);
+    throw error;
   }
-}
+};
