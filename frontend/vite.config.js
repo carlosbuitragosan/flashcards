@@ -14,7 +14,10 @@ export default defineConfig({
     emptyOutDir: true,
     manifest: 'manifest.json', 
     rollupOptions: {
-    input: 'src/main.jsx',
+    input: [
+      'src/main.jsx',
+      'src/style.css'
+    ],
     },
   },
   resolve: {
