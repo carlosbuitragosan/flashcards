@@ -31,5 +31,4 @@ Thumbs.db
 .ftp-deploy-sync.json
 .env
 .env.*
-.vite
 .editorconfig
