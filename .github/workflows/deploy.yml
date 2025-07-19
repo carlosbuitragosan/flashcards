@@ -30,5 +30,6 @@ jobs:
             **/storage/logs/**
             **/.env*
             **/vendor/**
+            README.md
           state-name: .ftp-deploy-sync.json
     
