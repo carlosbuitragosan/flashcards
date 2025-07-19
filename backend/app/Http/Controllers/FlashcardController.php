@@ -8,7 +8,13 @@ class FlashcardController extends Controller
 {
     public function random()
     {
-        $card = Flashcard::inRandomOrder()->first(['country', 'capital', 'deck_id']);
-        return response()->json($card);
+        try {
+            $card = Flashcard::inRandomOrder()->first(['country', 'capital', 'deck_id']);
+            return $card
+                ? response()->json($card)
+                : response()->json(['error' => 'No flashcards found'], 404);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
     }
 }

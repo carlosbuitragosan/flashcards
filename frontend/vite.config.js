@@ -1,4 +1,4 @@
-import { defineConfig } from "vite";
+import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
 
@@ -12,12 +12,9 @@ export default defineConfig({
   build: {
     outDir: '../backend/public/build',
     emptyOutDir: true,
-    manifest: 'manifest.json', 
+    manifest: 'manifest.json',
     rollupOptions: {
-    input: [
-      'src/main.jsx',
-      'src/style.css'
-    ],
+      input: ['src/main.jsx', 'src/style.scss'],
     },
   },
   resolve: {

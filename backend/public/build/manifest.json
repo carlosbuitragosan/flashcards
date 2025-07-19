@@ -1,6 +1,6 @@
 {
   "src/main.jsx": {
-    "file": "assets/main-BnDgqZAW.js",
+    "file": "assets/main-CQ2H5YGV.js",
     "name": "main",
     "src": "src/main.jsx",
     "isEntry": true,
@@ -8,9 +8,9 @@
       "assets/style-BTaXqxlN.css"
     ]
   },
-  "src/style.css": {
+  "src/style.scss": {
     "file": "assets/style-BTaXqxlN.css",
-    "src": "src/style.css",
+    "src": "src/style.scss",
     "isEntry": true,
     "names": [
       "style.css"
