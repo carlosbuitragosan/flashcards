@@ -1,12 +1,53 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-</head>
-<body>
-  <div id="root"></div>
-  <script type="module" src="/src/main.jsx"></script>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      #skeleton {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background: #212529;
+      }
+
+      .skeleton-card {
+        width: 18rem;
+        height: 25rem;
+        background: #6c757d;
+        border-radius: 1rem;
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.3);
+        animation: pulse 1.5s infinite;
+      }
+
+      @keyframes pulse {
+        0% {
+          opacity: 0.9;
+        }
+        50% {
+          opacity: 0.6;
+        }
+        100% {
+          opacity: 0.9;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="skeleton">
+      <div class="skeleton-wrapper">
+        <div class="skeleton-card"></div>
+      </div>
+    </div>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
 </html>

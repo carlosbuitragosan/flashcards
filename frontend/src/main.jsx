@@ -11,3 +11,6 @@ setAppHeight();
 window.addEventListener('resize', setAppHeight);
 
 ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+
+const skeleton = document.getElementById('skeleton');
+if (skeleton) skeleton.remove();

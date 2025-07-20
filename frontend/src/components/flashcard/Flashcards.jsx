@@ -14,7 +14,7 @@ export const Flashcards = () => {
         const data = await fetchAllFlashcards();
         setCards(data);
       } catch (err) {
-        console.errr('Error: ', err);
+        console.error('Error: ', err);
       }
     };
     loadCards();
@@ -50,13 +50,13 @@ export const Flashcards = () => {
               {/* FRONT */}
               <div className="card-face front position-absolute w-100 h-100 d-flex justify-content-center align-items-center">
                 <small className="label position-absolute">Country</small>
-                <p>{cards[currentIndex]?.country}</p>
+                <p className="card-name">{cards[currentIndex]?.country}</p>
               </div>
 
               {/* BACK */}
               <div className="card-face back w-100 h-100 d-flex justify-content-center align-items-center">
                 <small className="label position-absolute">Capital</small>
-                <p>{cards[currentIndex]?.capital}</p>
+                <p className="card-name">{cards[currentIndex]?.capital}</p>
               </div>
             </div>
           </motion.div>
