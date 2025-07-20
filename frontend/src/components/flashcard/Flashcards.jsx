@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
 import { fetchAllFlashcards } from '../../api/flashcardService';
 import { motion, AnimatePresence } from 'framer-motion';
+import './flashcards.css';
 
 export const Flashcards = () => {
   const [cards, setCards] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [isFlipped, setIsFlipped] = useState(false);
 
   useEffect(() => {
     const loadCards = async () => {
@@ -18,42 +20,50 @@ export const Flashcards = () => {
     loadCards();
   }, []);
 
+  useEffect(() => {
+    setIsFlipped(false);
+  }, [currentIndex]);
+
   const handleNext = () => {
     setCurrentIndex((prev) => (prev + 1) % cards.length);
   };
 
   return (
     <div className="d-flex justify-content-center align-items-center vh-100 bg-dark text-light">
-      <div
-        className="card border-0  p-4 rounded-4 text-center d-flex flex-column justify-content-between"
-        style={{
-          width: '22rem',
-          height: '30rem',
-          backgroundColor: 'transparent',
-          overflow: 'hidden',
-        }}
-      >
+      <div className="card-wrapper d-flex flex-column justify-content-between align-items-center">
         <AnimatePresence mode="wait">
           <motion.div
             key={cards[currentIndex]?.country}
-            className="card-body d-flex justify-content-center align-items-center rounded-4"
-            style={{
-              backgroundColor: '#0d6efd',
-              flexGrow: 1,
-            }}
+            className="flip-card-container w-100 h-100"
             initial={{ x: 300, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
             exit={{ x: -300, opacity: 0 }}
             transition={{ duration: 0.2 }}
           >
-            <p className="card-text fs-3 fw-semibold m-0 text-white">
-              {cards[currentIndex]?.country}
-            </p>
+            <div
+              className="flip-card w-100 h-100"
+              onClick={() => setIsFlipped((prev) => !prev)}
+              style={{
+                transform: isFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)',
+              }}
+            >
+              {/* FRONT */}
+              <div className="card-face front position-absolute w-100 h-100 d-flex justify-content-center align-items-center">
+                <small className="label position-absolute">Country</small>
+                <p>{cards[currentIndex]?.country}</p>
+              </div>
+
+              {/* BACK */}
+              <div className="card-face back w-100 h-100 d-flex justify-content-center align-items-center">
+                <small className="label position-absolute">Capital</small>
+                <p>{cards[currentIndex]?.capital}</p>
+              </div>
+            </div>
           </motion.div>
         </AnimatePresence>
 
-        <div className="card-footer bg-transparent border-0 mt-3">
-          <button className="btn btn-light w-100" onClick={handleNext}>
+        <div className="card-footer mt-3 w-100">
+          <button className="btn btn-secondary w-100" onClick={handleNext}>
             Next
           </button>
         </div>

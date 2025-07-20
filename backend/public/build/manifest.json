@@ -1,10 +1,11 @@
 {
   "src/main.jsx": {
-    "file": "assets/main-BmQs-aAq.js",
+    "file": "assets/main-xhGTtwuG.js",
     "name": "main",
     "src": "src/main.jsx",
     "isEntry": true,
     "css": [
+      "assets/main-pvVHvf3P.css",
       "assets/style-BTaXqxlN.css"
     ]
   },
