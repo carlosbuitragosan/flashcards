@@ -29,7 +29,7 @@ export const Flashcards = () => {
   };
 
   return (
-    <div className="d-flex justify-content-center align-items-center vh-100 bg-dark text-light">
+    <div className="d-flex justify-content-center align-items-center full-height bg-dark text-light">
       <div className="card-wrapper d-flex flex-column justify-content-between align-items-center">
         <AnimatePresence mode="wait">
           <motion.div

@@ -1,12 +1,17 @@
 html,
 body {
-  overflow: hidden;
-  overscroll-behavior: none;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  background-color: #212529 !important;
+}
+
+.full-height {
+  height: var(--app-height);
 }
 
 .card-wrapper {
-  width: 22rem;
-  height: 30rem;
+  width: 18rem;
+  height: 25rem;
 }
 
 .flip-card-container {
