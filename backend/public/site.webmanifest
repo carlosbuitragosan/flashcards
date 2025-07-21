@@ -1,0 +1,21 @@
+{
+  "name": "Country Flashcards",
+  "short_name": "Flashcards",
+  "icons": [
+    {
+      "src": "/logo/web-app-manifest-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/logo/web-app-manifest-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "theme_color": "#241f1f",
+  "background_color": "#241f1f",
+  "display": "standalone"
+}
