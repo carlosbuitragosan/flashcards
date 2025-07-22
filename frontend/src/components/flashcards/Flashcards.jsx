@@ -1,24 +1,26 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { fetchAllFlashcards } from '../../api/flashcardService';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useFlashcardStore } from '../../store/flashcardStore';
 import './flashcards.css';
 
-export const Flashcards = () => {
+export const Flashcards = ({ triggerShuffle, setTriggerShuffle }) => {
   const {
     cards,
-    setStoreCards,
+    setCards,
     currentIndex,
-    setStoreCurrentIndex,
+    setCurrentIndex,
     isFlipped,
-    setStoreIsFlipped,
+    setIsFlipped,
+    disableSlide,
+    setDisableSlide,
   } = useFlashcardStore();
 
   useEffect(() => {
     const loadCards = async () => {
       try {
         const data = await fetchAllFlashcards();
-        setStoreCards(data);
+        setCards(data);
       } catch (err) {
         console.error('Error: ', err);
       }
@@ -27,11 +29,21 @@ export const Flashcards = () => {
   }, []);
 
   useEffect(() => {
-    setStoreIsFlipped(false);
+    setIsFlipped(false);
   }, [currentIndex]);
 
+  useEffect(() => {
+    if (triggerShuffle) {
+      // do work
+      setTimeout(() => {
+        setTriggerShuffle(false);
+      }, 1000);
+    }
+  }, [triggerShuffle]);
+
   const handleNext = () => {
-    setStoreCurrentIndex((prev) => (prev + 1) % cards.length);
+    const nextIndex = (currentIndex + 1) % cards.length;
+    setCurrentIndex(nextIndex);
   };
 
   return (
@@ -41,14 +53,29 @@ export const Flashcards = () => {
           <motion.div
             key={cards[currentIndex]?.country}
             className="flip-card-container w-100 h-100"
-            initial={{ x: 300, opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            exit={{ x: -300, opacity: 0 }}
-            transition={{ duration: 0.2 }}
+            initial={disableSlide ? {} : { x: 300, opacity: 0 }}
+            animate={
+              disableSlide
+                ? { rotateY: triggerShuffle ? 360 * 8 : 0 }
+                : {
+                    x: 0,
+                    opacity: 1,
+                  }
+            }
+            exit={disableSlide ? {} : { x: -300, opacity: 0 }}
+            transition={{
+              duration: triggerShuffle ? 2 : 0.2,
+              ease: 'easeInOut',
+            }}
+            onAnimationComplete={() => {
+              if (triggerShuffle) {
+                setTriggerShuffle(false);
+              }
+            }}
           >
             <div
               className="flip-card w-100 h-100"
-              onClick={() => setStoreIsFlipped((prev) => !prev)}
+              onClick={() => setIsFlipped(!isFlipped)}
               style={{
                 transform: isFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)',
               }}

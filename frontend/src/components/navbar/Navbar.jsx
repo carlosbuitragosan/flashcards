@@ -1,6 +1,9 @@
+import { useFlashcardStore } from '../../store/flashcardStore';
+
 import './navbar.css';
 
-export const Navbar = () => {
+export const Navbar = ({ onShuffle }) => {
+  const { cards } = useFlashcardStore();
   return (
     <nav className="navbar navbar-dark px-3">
       <div className="nav-brand d-flex align-items-center gap-3">
@@ -13,7 +16,13 @@ export const Navbar = () => {
         />
         <h1 className="nav-title navbar-brand mb-0 h1">Country Flashcards</h1>
       </div>
-      <button className="btn btn-secondary">Shuffle</button>
+      <button
+        className="btn btn-secondary"
+        onClick={onShuffle}
+        disabled={cards.length === 0}
+      >
+        Shuffle
+      </button>
     </nav>
   );
 };
