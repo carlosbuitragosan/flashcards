@@ -1,18 +1,24 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { fetchAllFlashcards } from '../../api/flashcardService';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useFlashcardStore } from '../../store/flashcardStore';
 import './flashcards.css';
 
 export const Flashcards = () => {
-  const [cards, setCards] = useState([]);
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [isFlipped, setIsFlipped] = useState(false);
+  const {
+    cards,
+    setStoreCards,
+    currentIndex,
+    setStoreCurrentIndex,
+    isFlipped,
+    setStoreIsFlipped,
+  } = useFlashcardStore();
 
   useEffect(() => {
     const loadCards = async () => {
       try {
         const data = await fetchAllFlashcards();
-        setCards(data);
+        setStoreCards(data);
       } catch (err) {
         console.error('Error: ', err);
       }
@@ -21,11 +27,11 @@ export const Flashcards = () => {
   }, []);
 
   useEffect(() => {
-    setIsFlipped(false);
+    setStoreIsFlipped(false);
   }, [currentIndex]);
 
   const handleNext = () => {
-    setCurrentIndex((prev) => (prev + 1) % cards.length);
+    setStoreCurrentIndex((prev) => (prev + 1) % cards.length);
   };
 
   return (
@@ -42,7 +48,7 @@ export const Flashcards = () => {
           >
             <div
               className="flip-card w-100 h-100"
-              onClick={() => setIsFlipped((prev) => !prev)}
+              onClick={() => setStoreIsFlipped((prev) => !prev)}
               style={{
                 transform: isFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)',
               }}
