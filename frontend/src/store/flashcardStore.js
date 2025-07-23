@@ -13,6 +13,9 @@ export const useFlashcardStore = create((set, get) => ({
   disableSlide: false,
   setDisableSlide: (value) => set({ disableSlide: value }),
 
+  triggerShuffle: false,
+  setTriggerShuffle: (value) => set({ triggerShuffle: value }),
+
   shuffleCards: () => {
     const { cards } = get();
     const shuffled = [...cards];
@@ -26,8 +29,5 @@ export const useFlashcardStore = create((set, get) => ({
       isFlipped: false,
       disableSlide: true,
     });
-    setTimeout(() => {
-      set({ disableSlide: false });
-    }, 2000);
   },
 }));

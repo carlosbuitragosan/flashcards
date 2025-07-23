@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useFlashcardStore } from '../../store/flashcardStore';
 import './flashcards.css';
 
-export const Flashcards = ({ triggerShuffle, setTriggerShuffle }) => {
+export const Flashcards = () => {
   const {
     cards,
     setCards,
@@ -14,6 +14,8 @@ export const Flashcards = ({ triggerShuffle, setTriggerShuffle }) => {
     setIsFlipped,
     disableSlide,
     setDisableSlide,
+    triggerShuffle,
+    setTriggerShuffle,
   } = useFlashcardStore();
 
   useEffect(() => {
@@ -32,15 +34,6 @@ export const Flashcards = ({ triggerShuffle, setTriggerShuffle }) => {
     setIsFlipped(false);
   }, [currentIndex]);
 
-  useEffect(() => {
-    if (triggerShuffle) {
-      // do work
-      setTimeout(() => {
-        setTriggerShuffle(false);
-      }, 1000);
-    }
-  }, [triggerShuffle]);
-
   const handleNext = () => {
     const nextIndex = (currentIndex + 1) % cards.length;
     setCurrentIndex(nextIndex);
@@ -55,12 +48,14 @@ export const Flashcards = ({ triggerShuffle, setTriggerShuffle }) => {
             className="flip-card-container w-100 h-100"
             initial={disableSlide ? {} : { x: 300, opacity: 0 }}
             animate={
-              disableSlide
-                ? { rotateY: triggerShuffle ? 360 * 8 : 0 }
-                : {
-                    x: 0,
-                    opacity: 1,
-                  }
+              disableSlide && triggerShuffle
+                ? { rotateY: [0, 360 * 5] }
+                : disableSlide
+                  ? {}
+                  : {
+                      x: 0,
+                      opacity: 1,
+                    }
             }
             exit={disableSlide ? {} : { x: -300, opacity: 0 }}
             transition={{
@@ -70,6 +65,7 @@ export const Flashcards = ({ triggerShuffle, setTriggerShuffle }) => {
             onAnimationComplete={() => {
               if (triggerShuffle) {
                 setTriggerShuffle(false);
+                setDisableSlide(false);
               }
             }}
           >
@@ -96,7 +92,11 @@ export const Flashcards = ({ triggerShuffle, setTriggerShuffle }) => {
         </AnimatePresence>
 
         <div className="card-footer mt-3 w-100">
-          <button className="btn btn-secondary w-100" onClick={handleNext}>
+          <button
+            className="btn btn-secondary w-100"
+            onClick={handleNext}
+            disabled={disableSlide}
+          >
             Next
           </button>
         </div>
