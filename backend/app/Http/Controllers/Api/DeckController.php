@@ -4,16 +4,16 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Flashcard;
 use Illuminate\Http\JsonResponse;
+use App\Models\Deck;
 
-class FlashcardController extends Controller
+class DeckController extends Controller
 {
     public function index(): JsonResponse
     {
         try {
-            $cards = Flashcard::all();
-            return response()->json($cards);
+            $decks = Deck::all();
+            return response()->json($decks);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
