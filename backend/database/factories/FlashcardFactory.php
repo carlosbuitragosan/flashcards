@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use App\Models\Deck;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Flashcard>
@@ -14,7 +15,7 @@ class FlashcardFactory extends Factory
         return [
             'country' => $this->faker->country(),
             'capital' => $this->faker->city(),
-            'deck_id' => 1,
+            'deck_id' => Deck::factory(),
         ];
     }
 }

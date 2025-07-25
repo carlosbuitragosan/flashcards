@@ -12,7 +12,8 @@ class FlashcardTest extends TestCase
 
     public function test_it_returns_all_flashcards(): void
     {
-        \App\Models\Flashcard::factory()->count(10)->create();
+        $cards = \App\Models\Flashcard::factory()->count(10)->create();
+        dump($cards);
         $response = $this->getJson('/api/flashcards');
         $response
         ->assertOk()

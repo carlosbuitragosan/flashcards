@@ -18,4 +18,14 @@ class DeckController extends Controller
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
+
+    public function flashcards($deckId): JsonResponse
+    {
+        try {
+            $deck = Deck::with('flashcards')->find($deckId);
+            return response()->json($deck->flashcards);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
 }

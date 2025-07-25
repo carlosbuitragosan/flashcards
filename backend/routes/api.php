@@ -6,3 +6,4 @@ use App\Http\Controllers\Api\DeckController;
 
 Route::get('/flashcards', [FlashcardController::class, 'index']);
 Route::get('/decks', [DeckController::class, 'index']);
+Route::get('/decks/{id}/flashcards', [DeckController::class, 'flashcards']);
