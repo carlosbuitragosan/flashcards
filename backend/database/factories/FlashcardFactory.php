@@ -15,7 +15,6 @@ class FlashcardFactory extends Factory
         return [
             'country' => $this->faker->country(),
             'capital' => $this->faker->city(),
-            'deck_id' => Deck::factory(),
         ];
     }
 }

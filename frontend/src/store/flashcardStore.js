@@ -4,6 +4,12 @@ export const useFlashcardStore = create((set, get) => ({
   cards: [],
   setCards: (newCards) => set({ cards: newCards }),
 
+  continents: [],
+  setContinents: (newContinents) => set({ continents: newContinents }),
+
+  selectedContinentId: null,
+  setSelectedContinentId: (id) => set({ selectedContinentId: id }),
+
   currentIndex: 0,
   setCurrentIndex: (index) => set({ currentIndex: index }),
 

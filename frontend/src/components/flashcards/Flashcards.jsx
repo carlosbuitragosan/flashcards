@@ -1,5 +1,8 @@
 import { useEffect, useState } from 'react';
-import { fetchAllFlashcards } from '../../api/flashcardService';
+import {
+  fetchAllFlashcards,
+  fetchAllContinents,
+} from '../../api/flashcardService';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useFlashcardStore } from '../../store/flashcardStore';
 import './flashcards.css';
@@ -8,6 +11,8 @@ export const Flashcards = () => {
   const {
     cards,
     setCards,
+    continents,
+    setContinents,
     currentIndex,
     setCurrentIndex,
     isFlipped,
@@ -23,6 +28,8 @@ export const Flashcards = () => {
       try {
         const data = await fetchAllFlashcards();
         setCards(data);
+        const continentData = await fetchAllContinents();
+        setContinents(continentData);
       } catch (err) {
         console.error('Error: ', err);
       }
@@ -95,7 +102,7 @@ export const Flashcards = () => {
           <button
             className="btn btn-secondary w-100"
             onClick={handleNext}
-            disabled={disableSlide}
+            disabled={cards.length === 0 || disableSlide}
           >
             Next
           </button>

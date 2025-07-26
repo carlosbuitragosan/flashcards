@@ -11,7 +11,8 @@ return new class () extends Migration {
             $table->id();
             $table->string('country');
             $table->string('capital');
-            $table->unsignedBigInteger('deck_id');
+            $table->unasignedBigInteger('deck_id');
+            $table->foreign('deck_id')->references('id')->on('decks')->onDelete('cascade');
             $table->timestamps();
         });
     }
