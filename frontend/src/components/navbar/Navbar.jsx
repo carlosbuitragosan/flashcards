@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useFlashcardStore } from '../../store/flashcardStore';
 
 import './navbar.css';
@@ -11,6 +12,22 @@ export const Navbar = () => {
     shuffleCards();
     setTriggerShuffle(true);
   };
+
+  useEffect(() => {
+    const navbarMenu = document.getElementById('navbarMenu');
+    const continentMenu = document.getElementById('continentMenu');
+
+    const onNavbarHidden = () => {
+      continentMenu?.classList.remove('show');
+    };
+
+    navbarMenu?.addEventListener('hidden.bs.collapse', onNavbarHidden);
+
+    return () => {
+      navbarMenu?.removeEventListener('hidden.bs.collapse', onNavbarHidden);
+    };
+  });
+
   return (
     <nav className="navbar navbar-expand-md navbar-dark px-3">
       <div className="nav-brand d-flex align-items-center gap-3">
