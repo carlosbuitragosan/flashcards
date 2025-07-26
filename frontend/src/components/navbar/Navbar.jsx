@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import Collapse from 'bootstrap/js/dist/collapse';
 import { useFlashcardStore } from '../../store/flashcardStore';
 
 import './navbar.css';
@@ -11,6 +12,11 @@ export const Navbar = () => {
   const handleShuffle = () => {
     shuffleCards();
     setTriggerShuffle(true);
+
+    //Collapse menu on shuffle click
+    const navbarMenu = document.getElementById('navbarMenu');
+    const collapse = Collapse.getOrCreateInstance(navbarMenu);
+    collapse.hide();
   };
 
   useEffect(() => {
