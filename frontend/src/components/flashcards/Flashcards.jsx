@@ -12,6 +12,7 @@ export const Flashcards = () => {
   const {
     cards,
     setCards,
+    continents,
     setContinents,
     selectedContinentId,
     setSelectedContinentId,
@@ -25,6 +26,7 @@ export const Flashcards = () => {
     setTriggerShuffle,
   } = useFlashcardStore();
 
+  console.log('continents: ', continents);
   useEffect(() => {
     const loadCards = async () => {
       try {
@@ -104,6 +106,12 @@ export const Flashcards = () => {
               {/* FRONT */}
               <div className="card-face front position-absolute w-100 h-100 d-flex justify-content-center align-items-center">
                 <small className="label position-absolute">Country</small>
+                <small className="deck-label position-absolute">
+                  {cards[currentIndex]?.deck_id === selectedContinentId
+                    ? continents.find((cont) => cont.id === selectedContinentId)
+                        ?.continent
+                    : ''}
+                </small>
                 <p className="card-name">{cards[currentIndex]?.country}</p>
               </div>
 
