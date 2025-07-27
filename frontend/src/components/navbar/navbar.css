@@ -19,3 +19,23 @@
 .pointer {
   cursor: pointer;
 }
+
+@media (max-width: 767.98px) {
+  #navbarMenu {
+    position: absolute !important;
+    top: 100% !important;
+    left: 0 !important;
+    width: 100% !important;
+    z-index: 1 !important;
+    padding-bottom: 1rem;
+  }
+
+  .link-groupBy,
+  .dropdown-item {
+    text-align: center !important;
+  }
+
+  .dropdown-menu {
+    background-color: #212529 !important;
+  }
+}

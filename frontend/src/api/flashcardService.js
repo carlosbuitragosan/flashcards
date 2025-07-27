@@ -21,3 +21,13 @@ export const fetchAllContinents = async () => {
     throw error;
   }
 };
+
+export const fetchCardsById = async (id) => {
+  try {
+    const response = await axios.get(`/api/decks/${id}/flashcards`);
+    return response.data;
+  } catch (err) {
+    console.error('Error fetching cards by continent: ', err);
+    throw err;
+  }
+};

@@ -1,9 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
   fetchAllFlashcards,
   fetchAllContinents,
+  fetchCardsById,
 } from '../../api/flashcardService';
-import { motion, AnimatePresence } from 'framer-motion';
 import { useFlashcardStore } from '../../store/flashcardStore';
 import './flashcards.css';
 
@@ -11,8 +12,9 @@ export const Flashcards = () => {
   const {
     cards,
     setCards,
-    continents,
     setContinents,
+    selectedContinentId,
+    setSelectedContinentId,
     currentIndex,
     setCurrentIndex,
     isFlipped,
@@ -26,10 +28,9 @@ export const Flashcards = () => {
   useEffect(() => {
     const loadCards = async () => {
       try {
-        const data = await fetchAllFlashcards();
-        setCards(data);
         const continentData = await fetchAllContinents();
         setContinents(continentData);
+        setSelectedContinentId(null);
       } catch (err) {
         console.error('Error: ', err);
       }
@@ -40,6 +41,23 @@ export const Flashcards = () => {
   useEffect(() => {
     setIsFlipped(false);
   }, [currentIndex]);
+
+  useEffect(() => {
+    const loadCards = async () => {
+      try {
+        if (selectedContinentId === null) {
+          const allCards = await fetchAllFlashcards();
+          setCards(allCards);
+        } else {
+          const filteredCards = await fetchCardsById(selectedContinentId);
+          setCards(filteredCards);
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    loadCards();
+  }, [selectedContinentId]);
 
   const handleNext = () => {
     const nextIndex = (currentIndex + 1) % cards.length;
