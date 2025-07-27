@@ -28,6 +28,7 @@
     width: 100% !important;
     z-index: 1 !important;
     padding-bottom: 1rem;
+    background-color: #212529dd !important;
   }
 
   .link-groupBy,
@@ -36,6 +37,7 @@
   }
 
   .dropdown-menu {
-    background-color: #212529 !important;
+    background-color: #21252910 !important;
+    border: none !important;
   }
 }
