@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { useSwipeable } from 'react-swipeable';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   fetchAllFlashcards,
@@ -26,7 +27,6 @@ export const Flashcards = () => {
     setTriggerShuffle,
   } = useFlashcardStore();
 
-  console.log('continents: ', continents);
   useEffect(() => {
     const loadCards = async () => {
       try {
@@ -66,6 +66,12 @@ export const Flashcards = () => {
     setCurrentIndex(nextIndex);
   };
 
+  const handlers = useSwipeable({
+    onSwipedLeft: () => handleNext(),
+    preventScrollOnSwipe: true,
+    trackTouch: true,
+  });
+
   return (
     <div className="d-flex justify-content-center align-items-center full-height bg-dark text-light">
       <div className="card-wrapper d-flex flex-column justify-content-between align-items-center">
@@ -102,6 +108,7 @@ export const Flashcards = () => {
               style={{
                 transform: isFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)',
               }}
+              {...handlers}
             >
               {/* FRONT */}
               <div className="card-face front position-absolute w-100 h-100 d-flex justify-content-center align-items-center">
@@ -126,7 +133,7 @@ export const Flashcards = () => {
 
         <div className="card-footer mt-3 w-100">
           <button
-            className="btn btn-secondary w-100"
+            className="btn btn-secondary w-100 d-none d-md-inline"
             onClick={handleNext}
             disabled={cards.length === 0 || disableSlide}
           >

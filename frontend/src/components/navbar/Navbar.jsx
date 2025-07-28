@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
 import { useFlashcardStore } from '../../store/flashcardStore';
-
 import './navbar.css';
 
 export const Navbar = () => {
