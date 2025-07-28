@@ -113,6 +113,16 @@ export const Navbar = () => {
               Shuffle
             </button>
           </li>
+          <li className="nav-item">
+            <button
+              className="btn btn-secondary"
+              data-bs-toggle="modal"
+              data-bs-target="#focusModal"
+              disabled={cards.length === 0 || disableSlide}
+            >
+              Focus Mode
+            </button>
+          </li>
         </ul>
       </div>
     </nav>

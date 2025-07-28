@@ -73,74 +73,120 @@ export const Flashcards = () => {
   });
 
   return (
-    <div className="d-flex justify-content-center align-items-center full-height bg-dark text-light">
-      <div className="card-wrapper d-flex flex-column justify-content-between align-items-center">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={cards[currentIndex]?.country}
-            className="flip-card-container w-100 h-100"
-            initial={disableSlide ? {} : { x: 300, opacity: 0 }}
-            animate={
-              disableSlide && triggerShuffle
-                ? { rotateY: [0, 360 * 5] }
-                : disableSlide
-                  ? {}
-                  : {
-                      x: 0,
-                      opacity: 1,
-                    }
-            }
-            exit={disableSlide ? {} : { x: -300, opacity: 0 }}
-            transition={{
-              duration: triggerShuffle ? 2 : 0.2,
-              ease: 'easeInOut',
-            }}
-            onAnimationComplete={() => {
-              if (triggerShuffle) {
-                setTriggerShuffle(false);
-                setDisableSlide(false);
+    <>
+      <div className="d-flex justify-content-center align-items-center full-height bg-dark text-light">
+        <div className="card-wrapper d-flex flex-column justify-content-between align-items-center">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={cards[currentIndex]?.country}
+              className="flip-card-container w-100 h-100"
+              initial={disableSlide ? {} : { x: 300, opacity: 0 }}
+              animate={
+                disableSlide && triggerShuffle
+                  ? { rotateY: [0, 360 * 5] }
+                  : disableSlide
+                    ? {}
+                    : {
+                        x: 0,
+                        opacity: 1,
+                      }
               }
-            }}
-          >
-            <div
-              className="flip-card w-100 h-100"
-              onClick={() => setIsFlipped(!isFlipped)}
-              style={{
-                transform: isFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)',
+              exit={disableSlide ? {} : { x: -300, opacity: 0 }}
+              transition={{
+                duration: triggerShuffle ? 2 : 0.2,
+                ease: 'easeInOut',
               }}
-              {...handlers}
+              onAnimationComplete={() => {
+                if (triggerShuffle) {
+                  setTriggerShuffle(false);
+                  setDisableSlide(false);
+                }
+              }}
             >
-              {/* FRONT */}
-              <div className="card-face front position-absolute w-100 h-100 d-flex justify-content-center align-items-center">
-                <small className="label position-absolute">Country</small>
-                <small className="deck-label position-absolute">
-                  {cards[currentIndex]?.deck_id === selectedContinentId
-                    ? continents.find((cont) => cont.id === selectedContinentId)
-                        ?.continent
-                    : ''}
-                </small>
-                <p className="card-name">{cards[currentIndex]?.country}</p>
-              </div>
+              <div
+                className="flip-card w-100 h-100"
+                onClick={() => setIsFlipped(!isFlipped)}
+                style={{
+                  transform: isFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)',
+                }}
+                {...handlers}
+              >
+                {/* FRONT */}
+                <div className="card-face front position-absolute w-100 h-100 d-flex justify-content-center align-items-center">
+                  <small className="label position-absolute">Country</small>
+                  <small className="deck-label position-absolute">
+                    {cards[currentIndex]?.deck_id === selectedContinentId
+                      ? continents.find(
+                          (cont) => cont.id === selectedContinentId
+                        )?.continent
+                      : ''}
+                  </small>
+                  <p className="card-name">{cards[currentIndex]?.country}</p>
+                </div>
 
-              {/* BACK */}
-              <div className="card-face back w-100 h-100 d-flex justify-content-center align-items-center">
-                <small className="label position-absolute">Capital</small>
-                <p className="card-name">{cards[currentIndex]?.capital}</p>
+                {/* BACK */}
+                <div className="card-face back w-100 h-100 d-flex justify-content-center align-items-center">
+                  <small className="label position-absolute">Capital</small>
+                  <p className="card-name">{cards[currentIndex]?.capital}</p>
+                </div>
               </div>
-            </div>
-          </motion.div>
-        </AnimatePresence>
+            </motion.div>
+          </AnimatePresence>
 
-        <div className="card-footer mt-3 w-100">
-          <button
-            className="btn btn-secondary w-100 d-none d-md-inline"
-            onClick={handleNext}
-            disabled={cards.length === 0 || disableSlide}
-          >
-            Next
-          </button>
+          <div className="card-footer mt-3 w-100">
+            <button
+              className="btn btn-secondary w-100 d-none d-md-inline"
+              onClick={handleNext}
+              disabled={cards.length === 0 || disableSlide}
+            >
+              Next
+            </button>
+          </div>
         </div>
       </div>
-    </div>
+
+      {/* Focus Modal */}
+      <div
+        className="modal fade"
+        id="focusModal"
+        tabIndex="-1"
+        aria-labelledby="focusModalLabel"
+        aria-hidden="true"
+      >
+        <div className="modal-dialog modal-dialog-centered">
+          <div className="modal-content bg-dark text-light">
+            <div className="modal-header">
+              <h5 className="modal-title" id="focusModalLabel">
+                Focus Mode
+              </h5>
+              <button
+                type="button"
+                className="btn-close btn-close-white"
+                data-bs-dismiss="modal"
+                aria-label="close"
+              ></button>
+            </div>
+            <div className="modal-body">
+              <p>Number of cards: 10</p>
+              <p>
+                Continent:{' '}
+                {selectedContinentId === null
+                  ? 'All'
+                  : continents.find((c) => c.id === selectedContinentId)
+                      ?.continent}
+              </p>
+            </div>
+            <div className="modal-footer">
+              <button className="btn btn-secondary" data-bs-dismiss="modal">
+                Cancel
+              </button>
+              <button className="btn btn-secondary" onClick={() => {}}>
+                Start
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
   );
 };
