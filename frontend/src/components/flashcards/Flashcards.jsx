@@ -61,14 +61,15 @@ export const Flashcards = () => {
     const loadCards = async () => {
       try {
         // fetch all cards on first load / when 'all' is selected
-        if (selectedContinentId === null) {
+        if (selectedContinentId === null && cards.length === 0) {
+          // since localStorage retrieves saved cards, only fetch if no cards in array
           const allCards = await fetchAllFlashcards();
           setCards(allCards);
-        } else {
-          // fetch cards for a specific continent
-          const filteredCards = await fetchCardsById(selectedContinentId);
-          setCards(filteredCards);
+          return;
         }
+        // fetch cards for a specific continent
+        const filteredCards = await fetchCardsById(selectedContinentId);
+        setCards(filteredCards);
       } catch (err) {
         console.error(err);
       }
@@ -78,17 +79,18 @@ export const Flashcards = () => {
 
   const handleNext = () => {
     // End session in focus mode
+    if (isFocusMode && currentIndex === focusCards.length - 1) {
+      // renders cards array with current setting
+      setIsFocusMode(false);
+      // empty focus cards array and reset current index
+      (setFocusCards([]), setCurrentIndex(0));
+      toast('Session complete!');
+      setShowConfetti(true);
+      setTimeout(() => setShowConfetti(false), 8000);
+      return;
+    }
+    // Show next card in focus mode
     if (isFocusMode) {
-      if (currentIndex === focusCards.length - 1) {
-        // renders cards array with current setting
-        setIsFocusMode(false);
-        // empty focus cards array and reset current index
-        (setFocusCards([]), setCurrentIndex(0));
-        toast('Session complete!');
-        setShowConfetti(true);
-        setTimeout(() => setShowConfetti(false), 8000);
-        return;
-      }
       setCurrentIndex(currentIndex + 1);
     }
     // ** Normal mode **

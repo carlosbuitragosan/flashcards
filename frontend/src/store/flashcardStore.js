@@ -1,3 +1,4 @@
+import { use } from 'react';
 import { create } from 'zustand';
 
 export const useFlashcardStore = create((set, get) => ({
@@ -27,6 +28,7 @@ export const useFlashcardStore = create((set, get) => ({
   isFocusMode: false,
   setIsFocusMode: (value) => set({ isFocusMode: value }),
 
+  // Shuffle cards
   shuffleCards: () => {
     const { cards } = get();
     const shuffled = [...cards];
@@ -44,6 +46,7 @@ export const useFlashcardStore = create((set, get) => ({
     });
   },
 
+  // Focus mode
   startFocusMode: () => {
     const { cards } = get();
     const shuffled = [...cards];
@@ -64,3 +67,27 @@ export const useFlashcardStore = create((set, get) => ({
     });
   },
 }));
+
+// ** LOCAL STORAGE **
+// Restore state from localStorage
+const saved = localStorage.getItem('flashcardState');
+if (saved) {
+  // sets multiple values at once
+  useFlashcardStore.setState(JSON.parse(saved));
+}
+
+// updates localStorage everytime any piece of the state bellow changes
+useFlashcardStore.subscribe((state) => {
+  const { isFocusMode, cards, focusCards, currentIndex, selectedContinentId } =
+    state;
+  const stateToPersist = {
+    isFocusMode,
+    currentIndex,
+    selectedContinentId,
+    cards: isFocusMode ? undefined : cards,
+    focusCards: isFocusMode ? focusCards : undefined,
+  };
+
+  // Save to localStorage
+  localStorage.setItem('flashcardState', JSON.stringify(stateToPersist));
+});
