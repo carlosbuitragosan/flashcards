@@ -10,6 +10,7 @@ export const Navbar = () => {
     continents,
     selectedContinentId,
     setSelectedContinentId,
+    isFocusMode,
   } = useFlashcardStore();
 
   const handleShuffle = () => {
@@ -106,7 +107,7 @@ export const Navbar = () => {
             <button
               className="btn btn-secondary"
               onClick={handleShuffle}
-              disabled={cards.length === 0 || disableSlide}
+              disabled={cards.length === 0 || disableSlide || isFocusMode}
             >
               Shuffle
             </button>

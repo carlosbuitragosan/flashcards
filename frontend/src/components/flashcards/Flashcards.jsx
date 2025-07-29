@@ -208,9 +208,9 @@ export const Flashcards = () => {
               ></button>
             </div>
             <div className="modal-body">
-              <p>Number of cards: 10</p>
+              <p>Cards: 10</p>
               <p>
-                Continent:{' '}
+                Region:{' '}
                 {selectedContinentId === null
                   ? 'All'
                   : continents.find((c) => c.id === selectedContinentId)
@@ -236,7 +236,7 @@ export const Flashcards = () => {
       {/* Display confetti */}
       {showConfetti && (
         <Confetti
-          numberOfPieces={1000}
+          numberOfPieces={800}
           initialVelocityY={-15}
           gravity={0.1}
           recycle={false}
