@@ -60,6 +60,10 @@ body {
   text-align: center;
 }
 
+.custom-toast .Toastify__progress-bar {
+  background: #28b352 !important;
+}
+
 @media screen and (min-width: 768px) {
   .full-height {
     height: var(--app-height);

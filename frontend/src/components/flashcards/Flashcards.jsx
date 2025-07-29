@@ -1,5 +1,7 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useSwipeable } from 'react-swipeable';
+import { toast } from 'react-toastify';
+import Confetti from 'react-confetti';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useFlashcardStore } from '../../store/flashcardStore';
 import {
@@ -10,6 +12,7 @@ import {
 import './flashcards.css';
 
 export const Flashcards = () => {
+  const [showConfetti, setShowConfetti] = useState(false);
   const {
     cards,
     setCards,
@@ -23,7 +26,15 @@ export const Flashcards = () => {
     setIsFlipped,
     disableSlide,
     setDisableSlide,
+    focusCards,
+    setFocusCards,
+    isFocusMode,
+    setIsFocusMode,
+    startFocusMode,
   } = useFlashcardStore();
+
+  // displays cards conditionally
+  const activeCards = isFocusMode ? focusCards : cards;
 
   // runs once on component mount
   useEffect(() => {
@@ -66,6 +77,21 @@ export const Flashcards = () => {
   }, [selectedContinentId]);
 
   const handleNext = () => {
+    // End session in focus mode
+    if (isFocusMode) {
+      if (currentIndex === focusCards.length - 1) {
+        // renders cards array with current setting
+        setIsFocusMode(false);
+        // empty focus cards array and reset current index
+        (setFocusCards([]), setCurrentIndex(0));
+        toast('Session complete!');
+        setShowConfetti(true);
+        setTimeout(() => setShowConfetti(false), 8000);
+        return;
+      }
+      setCurrentIndex(currentIndex + 1);
+    }
+    // ** Normal mode **
     // calculate next index; loops back to 0
     const nextIndex = (currentIndex + 1) % cards.length;
     // update current index to show next card
@@ -78,6 +104,11 @@ export const Flashcards = () => {
     trackTouch: true,
   });
 
+  // Starts focus mode with 10 random cards from deck
+  const handleFocus = () => {
+    startFocusMode();
+  };
+
   return (
     <>
       <div className="flashcard-content d-flex justify-content-center align-items-center full-height bg-dark text-light">
@@ -85,7 +116,7 @@ export const Flashcards = () => {
           <AnimatePresence mode="wait">
             <motion.div
               // triggers animations when card changes
-              key={cards[currentIndex]?.country}
+              key={activeCards[currentIndex]?.country}
               className="flip-card-container w-100 h-100"
               // slide in when disableSlide is false ()
               initial={disableSlide ? {} : { x: 300, opacity: 0 }}
@@ -120,19 +151,23 @@ export const Flashcards = () => {
                 <div className="card-face front position-absolute w-100 h-100 d-flex justify-content-center align-items-center">
                   <small className="label position-absolute">Country</small>
                   <small className="deck-label position-absolute">
-                    {cards[currentIndex]?.deck_id === selectedContinentId
+                    {activeCards[currentIndex]?.deck_id === selectedContinentId
                       ? continents.find(
                           (cont) => cont.id === selectedContinentId
                         )?.continent
                       : ''}
                   </small>
-                  <p className="card-name">{cards[currentIndex]?.country}</p>
+                  <p className="card-name">
+                    {activeCards[currentIndex]?.country}
+                  </p>
                 </div>
 
                 {/* BACK */}
                 <div className="card-face back w-100 h-100 d-flex justify-content-center align-items-center">
                   <small className="label position-absolute">Capital</small>
-                  <p className="card-name">{cards[currentIndex]?.capital}</p>
+                  <p className="card-name">
+                    {activeCards[currentIndex]?.capital}
+                  </p>
                 </div>
               </div>
             </motion.div>
@@ -143,7 +178,7 @@ export const Flashcards = () => {
               className="btn btn-secondary w-100 d-none d-md-inline"
               onClick={handleNext}
               // disable if cards are loading or animation is happening
-              disabled={cards.length === 0 || disableSlide}
+              disabled={activeCards.length === 0 || disableSlide}
             >
               Next
             </button>
@@ -186,13 +221,27 @@ export const Flashcards = () => {
               <button className="btn btn-secondary" data-bs-dismiss="modal">
                 Cancel
               </button>
-              <button className="btn btn-secondary" onClick={() => {}}>
+              <button
+                className="btn btn-secondary"
+                data-bs-dismiss="modal"
+                onClick={handleFocus}
+              >
                 Start
               </button>
             </div>
           </div>
         </div>
       </div>
+
+      {/* Display confetti */}
+      {showConfetti && (
+        <Confetti
+          numberOfPieces={1000}
+          initialVelocityY={-15}
+          gravity={0.1}
+          recycle={false}
+        />
+      )}
     </>
   );
 };

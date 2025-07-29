@@ -20,6 +20,7 @@ export const useFlashcardStore = create((set, get) => ({
   setDisableSlide: (value) => set({ disableSlide: value }),
 
   focusCards: [],
+  setFocusCards: (newCards) => set({ focusCards: newCards }),
 
   focusProgress: {},
 
@@ -29,6 +30,8 @@ export const useFlashcardStore = create((set, get) => ({
   shuffleCards: () => {
     const { cards } = get();
     const shuffled = [...cards];
+
+    //shuffle the array
     for (let i = shuffled.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
@@ -38,6 +41,26 @@ export const useFlashcardStore = create((set, get) => ({
       currentIndex: 0,
       isFlipped: false,
       disableSlide: true,
+    });
+  },
+
+  startFocusMode: () => {
+    const { cards } = get();
+    const shuffled = [...cards];
+
+    //shuffle the array
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+
+    // Take the first 10 cards
+    const focusCards = shuffled.slice(0, 10);
+
+    set({
+      focusCards,
+      isFocusMode: true,
+      currentIndex: 0,
     });
   },
 }));
