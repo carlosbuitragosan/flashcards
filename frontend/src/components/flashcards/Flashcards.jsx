@@ -1,12 +1,12 @@
 import { useEffect } from 'react';
 import { useSwipeable } from 'react-swipeable';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useFlashcardStore } from '../../store/flashcardStore';
 import {
   fetchAllFlashcards,
   fetchAllContinents,
   fetchCardsById,
 } from '../../api/flashcardService';
-import { useFlashcardStore } from '../../store/flashcardStore';
 import './flashcards.css';
 
 export const Flashcards = () => {
@@ -23,15 +23,15 @@ export const Flashcards = () => {
     setIsFlipped,
     disableSlide,
     setDisableSlide,
-    triggerShuffle,
-    setTriggerShuffle,
   } = useFlashcardStore();
 
+  // runs once on component mount
   useEffect(() => {
     const loadCards = async () => {
       try {
         const continentData = await fetchAllContinents();
         setContinents(continentData);
+        //set to null loads all cards
         setSelectedContinentId(null);
       } catch (err) {
         console.error('Error: ', err);
@@ -41,16 +41,20 @@ export const Flashcards = () => {
   }, []);
 
   useEffect(() => {
+    // Reset card to its front face
     setIsFlipped(false);
-  }, [currentIndex]);
+  }, [currentIndex]); // <- runs when card changes
 
+  // Runs every time a continent is selected
   useEffect(() => {
     const loadCards = async () => {
       try {
+        // fetch all cards on first load / when 'all' is selected
         if (selectedContinentId === null) {
           const allCards = await fetchAllFlashcards();
           setCards(allCards);
         } else {
+          // fetch cards for a specific continent
           const filteredCards = await fetchCardsById(selectedContinentId);
           setCards(filteredCards);
         }
@@ -62,7 +66,9 @@ export const Flashcards = () => {
   }, [selectedContinentId]);
 
   const handleNext = () => {
+    // calculate next index; loops back to 0
     const nextIndex = (currentIndex + 1) % cards.length;
+    // update current index to show next card
     setCurrentIndex(nextIndex);
   };
 
@@ -74,44 +80,43 @@ export const Flashcards = () => {
 
   return (
     <>
-      <div className="d-flex justify-content-center align-items-center full-height bg-dark text-light">
+      <div className="flashcard-content d-flex justify-content-center align-items-center full-height bg-dark text-light">
         <div className="card-wrapper d-flex flex-column justify-content-between align-items-center">
           <AnimatePresence mode="wait">
             <motion.div
+              // triggers animations when card changes
               key={cards[currentIndex]?.country}
               className="flip-card-container w-100 h-100"
+              // slide in when disableSlide is false ()
               initial={disableSlide ? {} : { x: 300, opacity: 0 }}
               animate={
-                disableSlide && triggerShuffle
-                  ? { rotateY: [0, 360 * 5] }
-                  : disableSlide
-                    ? {}
-                    : {
-                        x: 0,
-                        opacity: 1,
-                      }
+                disableSlide
+                  ? { rotateY: [0, 360 * 5] } // <- shuffle animation full spin
+                  : { x: 0, opacity: 1 } // <- normal card slide-in animation
               }
+              //  slide out
               exit={disableSlide ? {} : { x: -300, opacity: 0 }}
               transition={{
-                duration: triggerShuffle ? 2 : 0.2,
+                duration: disableSlide ? 2 : 0.2,
                 ease: 'easeInOut',
               }}
               onAnimationComplete={() => {
-                if (triggerShuffle) {
-                  setTriggerShuffle(false);
+                if (disableSlide) {
                   setDisableSlide(false);
                 }
               }}
             >
+              {/* this wrapper preserves 3d space and controls rotation */}
               <div
                 className="flip-card w-100 h-100"
                 onClick={() => setIsFlipped(!isFlipped)}
                 style={{
                   transform: isFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)',
                 }}
-                {...handlers}
+                {...handlers} // <- enables swipe gestures
               >
                 {/* FRONT */}
+                {/* .card-face has backface-visibility: hidden so only this side is visible */}
                 <div className="card-face front position-absolute w-100 h-100 d-flex justify-content-center align-items-center">
                   <small className="label position-absolute">Country</small>
                   <small className="deck-label position-absolute">
@@ -137,6 +142,7 @@ export const Flashcards = () => {
             <button
               className="btn btn-secondary w-100 d-none d-md-inline"
               onClick={handleNext}
+              // disable if cards are loading or animation is happening
               disabled={cards.length === 0 || disableSlide}
             >
               Next

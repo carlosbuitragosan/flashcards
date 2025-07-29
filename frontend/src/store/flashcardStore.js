@@ -19,8 +19,12 @@ export const useFlashcardStore = create((set, get) => ({
   disableSlide: false,
   setDisableSlide: (value) => set({ disableSlide: value }),
 
-  triggerShuffle: false,
-  setTriggerShuffle: (value) => set({ triggerShuffle: value }),
+  focusCards: [],
+
+  focusProgress: {},
+
+  isFocusMode: false,
+  setIsFocusMode: (value) => set({ isFocusMode: value }),
 
   shuffleCards: () => {
     const { cards } = get();

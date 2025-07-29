@@ -5,29 +5,32 @@ body {
   background-color: #212529 !important;
 }
 
-.full-height {
-  height: var(--app-height);
+.flashcard-content {
+  margin-top: 3rem;
 }
-
 .card-wrapper {
   width: 18rem;
   height: 25rem;
 }
 
+/* gives a natural 3d look */
 .flip-card-container {
-  perspective: 1000px;
+  perspective: 900px;
 }
 
 .flip-card {
   cursor: pointer;
+  /* allow 3d transformations so front/back can be layered */
   transform-style: preserve-3d;
   transition: transform 0.4s ease-in-out;
 }
 
+/* shared styles for both front and back */
 .card-face {
   background-color: #0d6efd;
   color: white;
   border-radius: 1rem;
+  /* prevent the 'back' side from showing */
   backface-visibility: hidden;
   padding: 1rem;
   font-size: 1.5rem;
@@ -55,4 +58,10 @@ body {
 
 .card-name {
   text-align: center;
+}
+
+@media screen and (min-width: 768px) {
+  .full-height {
+    height: var(--app-height);
+  }
 }

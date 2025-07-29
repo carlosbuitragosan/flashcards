@@ -6,7 +6,6 @@ export const Navbar = () => {
   const {
     cards,
     shuffleCards,
-    setTriggerShuffle,
     disableSlide,
     continents,
     selectedContinentId,
@@ -15,7 +14,6 @@ export const Navbar = () => {
 
   const handleShuffle = () => {
     shuffleCards();
-    setTriggerShuffle(true);
   };
 
   const onSelectContinent = (id) => {
@@ -39,7 +37,7 @@ export const Navbar = () => {
   });
 
   return (
-    <nav className="navbar navbar-expand-md navbar-dark px-3 align-items-start">
+    <nav className="navbar navbar-expand-md navbar-dark px-3 mt-2 align-items-start">
       <div className="nav-brand d-flex align-items-center gap-3">
         <img
           className="nav-logo"
