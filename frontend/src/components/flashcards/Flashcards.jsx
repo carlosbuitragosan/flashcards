@@ -70,17 +70,14 @@ export const Flashcards = () => {
       try {
         const continentId = useFlashcardStore.getState().selectedContinentId;
 
-        // Only fetch if no cards are loaded
-        if (cards.length === 0) {
-          // Fetch all cards if id=null else fetch cards by id
-          const newCards =
-            continentId === null
-              ? await fetchAllFlashcards()
-              : await fetchCardsById(continentId);
+        // Fetch all cards if id=null else fetch cards by id
+        const newCards =
+          continentId === null
+            ? await fetchAllFlashcards()
+            : await fetchCardsById(continentId);
 
-          // Save to the store
-          setCards(newCards);
-        }
+        // Save to the store
+        setCards(newCards);
       } catch (err) {
         console.error('Error loading cards: ', err);
       }
@@ -127,6 +124,8 @@ export const Flashcards = () => {
   const handleFocus = () => {
     startFocusMode();
   };
+
+  console.log('cards: ', cards.slice(0, 3));
 
   return (
     <>
