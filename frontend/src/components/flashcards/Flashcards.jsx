@@ -12,6 +12,9 @@ import {
 import './flashcards.css';
 
 export const Flashcards = () => {
+  // Detect touch capability
+  const isTouchDevice =
+    'ontouchstart' in window || navigator.maxTouchPoints > 0;
   const [showConfetti, setShowConfetti] = useState(false);
   const {
     cards,
@@ -190,14 +193,16 @@ export const Flashcards = () => {
           </AnimatePresence>
 
           <div className="card-footer mt-3 w-100">
-            <button
-              className="btn btn-secondary w-100 d-none d-md-inline"
-              onClick={handleNext}
-              // disable if cards are loading or animation is happening
-              disabled={activeCards.length === 0 || disableSlide}
-            >
-              Next
-            </button>
+            {!isTouchDevice && (
+              <button
+                className="btn btn-secondary w-100"
+                onClick={handleNext}
+                // disable if cards are loading or animation is happening
+                disabled={activeCards.length === 0 || disableSlide}
+              >
+                Next
+              </button>
+            )}
           </div>
         </div>
       </div>
