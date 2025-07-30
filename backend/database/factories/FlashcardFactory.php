@@ -15,6 +15,9 @@ class FlashcardFactory extends Factory
         return [
             'country' => $this->faker->country(),
             'capital' => $this->faker->city(),
+            'deck_id' => Deck::factory(),
+            'flag' => $this->faker->imageUrl(640, 480, 'flags', true),
+            'flag_alt' => 'Flag of ' . $this->faker->country,
         ];
     }
 }

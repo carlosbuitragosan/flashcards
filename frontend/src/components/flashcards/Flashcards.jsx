@@ -125,8 +125,6 @@ export const Flashcards = () => {
     startFocusMode();
   };
 
-  console.log('cards: ', cards.slice(0, 3));
-
   return (
     <>
       <div className="flashcard-content d-flex justify-content-center align-items-center full-height bg-dark text-light">
@@ -175,6 +173,11 @@ export const Flashcards = () => {
                         )?.continent
                       : ''}
                   </small>
+                  <img
+                    src={activeCards[currentIndex]?.flag}
+                    className="flag-label position-absolute"
+                    alt={activeCards[currentIndex]?.flag_alt}
+                  />
                   <p className="card-name">
                     {activeCards[currentIndex]?.country}
                   </p>
@@ -183,6 +186,11 @@ export const Flashcards = () => {
                 {/* BACK */}
                 <div className="card-face back w-100 h-100 d-flex justify-content-center align-items-center">
                   <small className="label position-absolute">Capital</small>
+                  <img
+                    src={activeCards[currentIndex]?.flag}
+                    className="flag-label position-absolute"
+                    alt={activeCards[currentIndex]?.flag_alt}
+                  />
                   <p className="card-name">
                     {activeCards[currentIndex]?.capital}
                   </p>

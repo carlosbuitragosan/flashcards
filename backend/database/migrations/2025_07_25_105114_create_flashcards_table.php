@@ -11,8 +11,10 @@ return new class () extends Migration {
             $table->id();
             $table->string('country');
             $table->string('capital');
-            $table->unasignedBigInteger('deck_id');
+            $table->unsignedBigInteger('deck_id');
             $table->foreign('deck_id')->references('id')->on('decks')->onDelete('cascade');
+            $table->string('flag');
+            $table->text('flag_alt');
             $table->timestamps();
         });
     }

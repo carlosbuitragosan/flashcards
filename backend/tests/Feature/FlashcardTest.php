@@ -18,7 +18,7 @@ class FlashcardTest extends TestCase
         ->assertOk()
         ->assertJsonCount(10)
         ->assertJsonStructure([
-          '*' => ['country', 'capital', 'deck_id'],
+          '*' => ['country', 'capital', 'deck_id', 'flag', 'flag_alt'],
         ]);
     }
 }
