@@ -38,17 +38,22 @@ export const Flashcards = () => {
 
   // runs once on component mount
   useEffect(() => {
-    const loadCards = async () => {
+    const init = async () => {
       try {
         const continentData = await fetchAllContinents();
         setContinents(continentData);
-        //set to null loads all cards
-        setSelectedContinentId(null);
+
+        const continentId = useFlashcardStore.getState().selectedContinentId;
+
+        // This triggers the second useEffect below
+        if (continentId === null) {
+          setSelectedContinentId(null);
+        }
       } catch (err) {
-        console.error('Error: ', err);
+        console.error('Error Loading continents: ', err);
       }
     };
-    loadCards();
+    init();
   }, []);
 
   useEffect(() => {
@@ -60,23 +65,32 @@ export const Flashcards = () => {
   useEffect(() => {
     const loadCards = async () => {
       try {
-        // fetch all cards on first load / when 'all' is selected
-        if (selectedContinentId === null && cards.length === 0) {
-          // since localStorage retrieves saved cards, only fetch if no cards in array
-          const allCards = await fetchAllFlashcards();
-          setCards(allCards);
-          return;
+        const continentId = useFlashcardStore.getState().selectedContinentId;
+
+        // Only fetch if no cards are loaded
+        if (cards.length === 0) {
+          // Fetch all cards if id=null else fetch cards by id
+          const newCards =
+            continentId === null
+              ? await fetchAllFlashcards()
+              : await fetchCardsById(continentId);
+
+          // Save to the store
+          setCards(newCards);
         }
-        // fetch cards for a specific continent
-        const filteredCards = await fetchCardsById(selectedContinentId);
-        setCards(filteredCards);
       } catch (err) {
-        console.error(err);
+        console.error('Error loading cards: ', err);
       }
     };
     loadCards();
   }, [selectedContinentId]);
 
+  useEffect(() => {
+    // Reset card to its front face
+    setIsFlipped(false);
+  }, [currentIndex]); // <- runs when card changes
+
+  // Action for next card
   const handleNext = () => {
     // End session in focus mode
     if (isFocusMode && currentIndex === focusCards.length - 1) {
@@ -84,7 +98,7 @@ export const Flashcards = () => {
       setIsFocusMode(false);
       // empty focus cards array and reset current index
       (setFocusCards([]), setCurrentIndex(0));
-      toast('Session complete!');
+      toast('Focus session complete!');
       setShowConfetti(true);
       setTimeout(() => setShowConfetti(false), 8000);
       return;

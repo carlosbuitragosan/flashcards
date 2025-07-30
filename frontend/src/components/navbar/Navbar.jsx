@@ -11,6 +11,7 @@ export const Navbar = () => {
     selectedContinentId,
     setSelectedContinentId,
     isFocusMode,
+    setCurrentIndex,
   } = useFlashcardStore();
 
   const handleShuffle = () => {
@@ -19,6 +20,7 @@ export const Navbar = () => {
 
   const onSelectContinent = (id) => {
     setSelectedContinentId(id);
+    setCurrentIndex(0);
   };
 
   // collapses the continent dropdown when the main menu collapses
@@ -97,7 +99,10 @@ export const Navbar = () => {
                 data-bs-toggle="dropdown"
                 data-bs-target="#continentMenu"
               >
-                <li className="pointer" onClick={() => onSelectContinent(null)}>
+                <li
+                  className={`pointer ${selectedContinentId === null ? 'text-decoration-underline' : ''}`}
+                  onClick={() => onSelectContinent(null)}
+                >
                   Show All
                 </li>
               </span>
