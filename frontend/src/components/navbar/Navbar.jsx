@@ -39,6 +39,7 @@ export const Navbar = () => {
     };
   });
 
+  console.log();
   return (
     <nav className="navbar navbar-expand-md navbar-dark px-3 mt-2 align-items-start">
       <div className="nav-brand d-flex align-items-center gap-3">
@@ -122,7 +123,12 @@ export const Navbar = () => {
               className="btn btn-secondary"
               data-bs-toggle="modal"
               data-bs-target="#focusModal"
-              disabled={cards.length === 0 || disableSlide}
+              disabled={
+                cards.length === 0 ||
+                disableSlide ||
+                continents.find((c) => c.id === selectedContinentId)
+                  ?.continent === 'Antarctic'
+              }
             >
               Focus Mode
             </button>
