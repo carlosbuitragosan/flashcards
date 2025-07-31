@@ -1,5 +1,4 @@
 import { useEffect } from 'react';
-import { toast } from 'react-toastify';
 import { useFlashcardStore } from '../../store/flashcardStore';
 import './navbar.css';
 
@@ -13,33 +12,39 @@ export const Navbar = () => {
     setSelectedContinentId,
     isFocusMode,
     endFocusMode,
+    hideBurgerMenu,
     setCurrentIndex,
+    setIsFlipped,
   } = useFlashcardStore();
 
   const handleShuffle = () => {
     shuffleCards();
+    hideBurgerMenu();
   };
 
   const onSelectContinent = (id) => {
     setSelectedContinentId(id);
     setCurrentIndex(0);
+    //In cases where currentIndex is already 0 (same index)
+    setIsFlipped(false);
+    hideBurgerMenu();
   };
 
   // collapses the continent dropdown when the main menu collapses
-  useEffect(() => {
-    const navbarMenu = document.getElementById('navbarMenu');
-    const continentMenu = document.getElementById('continentMenu');
+  // useEffect(() => {
+  //   const navbarMenu = document.getElementById('navbarMenu');
+  //   const continentMenu = document.getElementById('continentMenu');
 
-    const onNavbarHidden = () => {
-      continentMenu?.classList.remove('show');
-    };
+  //   const onNavbarHidden = () => {
+  //     continentMenu?.classList.remove('show');
+  //   };
 
-    navbarMenu?.addEventListener('hidden.bs.collapse', onNavbarHidden);
+  //   navbarMenu?.addEventListener('hidden.bs.collapse', onNavbarHidden);
 
-    return () => {
-      navbarMenu?.removeEventListener('hidden.bs.collapse', onNavbarHidden);
-    };
-  });
+  //   return () => {
+  //     navbarMenu?.removeEventListener('hidden.bs.collapse', onNavbarHidden);
+  //   };
+  // });
 
   return (
     <nav className="navbar navbar-expand-md navbar-dark px-3 mt-2 align-items-start">
@@ -96,18 +101,15 @@ export const Navbar = () => {
                   </span>
                 </li>
               ))}
-              <span
-                className="dropdown-item"
-                data-bs-toggle="dropdown"
-                data-bs-target="#continentMenu"
-              >
-                <li
-                  className={`pointer  ${selectedContinentId === null ? 'text-decoration-underline' : ''}`}
-                  onClick={() => onSelectContinent(null)}
+              <li onClick={() => onSelectContinent(null)}>
+                <span
+                  className={`dropdown-item pointer  ${selectedContinentId === null ? 'text-decoration-underline' : ''}`}
+                  data-bs-toggle="dropdown"
+                  data-bs-target="#continentMenu"
                 >
                   Show All
-                </li>
-              </span>
+                </span>
+              </li>
             </ul>
           </li>
           <li className="nav-item">

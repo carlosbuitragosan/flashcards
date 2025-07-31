@@ -35,6 +35,7 @@ export const Flashcards = () => {
     setIsFocusMode,
     startFocusMode,
     endFocusMode,
+    hideBurgerMenu,
   } = useFlashcardStore();
 
   // displays cards conditionally
@@ -124,6 +125,7 @@ export const Flashcards = () => {
   // Starts focus mode with 10 random cards from deck
   const startFocus = () => {
     startFocusMode();
+    hideBurgerMenu();
   };
 
   return (
@@ -247,14 +249,14 @@ export const Flashcards = () => {
             </div>
             <div className="modal-footer">
               <button className="btn btn-secondary" data-bs-dismiss="modal">
-                Cancel
+                CANCEL
               </button>
               <button
                 className="btn btn-secondary"
                 data-bs-dismiss="modal"
                 onClick={startFocus}
               >
-                Start
+                START
               </button>
             </div>
           </div>

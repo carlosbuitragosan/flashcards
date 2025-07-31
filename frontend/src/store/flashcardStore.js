@@ -28,6 +28,17 @@ export const useFlashcardStore = create((set, get) => ({
   isFocusMode: false,
   setIsFocusMode: (value) => set({ isFocusMode: value }),
 
+  hideBurgerMenu: () => {
+    const menu = document.getElementById('navbarMenu');
+    if (
+      menu?.classList.contains('collapse') &&
+      //'show' is only applied when it's a burger menu, so it's safe to run the hide animation
+      menu.classList.contains('show')
+    ) {
+      document.querySelector('.navbar-toggler')?.click();
+    }
+  },
+
   // Shuffle cards
   shuffleCards: () => {
     const { cards } = get();
@@ -68,6 +79,8 @@ export const useFlashcardStore = create((set, get) => ({
   },
 
   endFocusMode: () => {
+    const { hideBurgerMenu } = get();
+    hideBurgerMenu();
     set({
       focusCards: [],
       isFocusMode: false,
