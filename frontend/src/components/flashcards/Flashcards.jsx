@@ -166,6 +166,7 @@ export const Flashcards = () => {
                 {/* .card-face has backface-visibility: hidden so only this side is visible */}
                 <div className="card-face front position-absolute w-100 h-100 d-flex justify-content-center align-items-center">
                   <small className="label position-absolute">Country</small>
+
                   <small className="deck-label position-absolute">
                     {activeCards[currentIndex]?.deck_id === selectedContinentId
                       ? continents.find(
@@ -173,11 +174,7 @@ export const Flashcards = () => {
                         )?.continent
                       : ''}
                   </small>
-                  <img
-                    src={activeCards[currentIndex]?.flag}
-                    className="flag-label position-absolute"
-                    alt={activeCards[currentIndex]?.flag_alt}
-                  />
+
                   <p className="card-name">
                     {activeCards[currentIndex]?.country}
                   </p>
@@ -186,14 +183,16 @@ export const Flashcards = () => {
                 {/* BACK */}
                 <div className="card-face back w-100 h-100 d-flex justify-content-center align-items-center">
                   <small className="label position-absolute">Capital</small>
+
+                  <p className="card-name">
+                    {activeCards[currentIndex]?.capital}
+                  </p>
+
                   <img
                     src={activeCards[currentIndex]?.flag}
                     className="flag-label position-absolute"
                     alt={activeCards[currentIndex]?.flag_alt}
                   />
-                  <p className="card-name">
-                    {activeCards[currentIndex]?.capital}
-                  </p>
                 </div>
               </div>
             </motion.div>

@@ -15,10 +15,15 @@
 .btn {
   background-color: #28b352 !important;
   width: 120px;
+  border: none !important;
 }
 
 .pointer {
   cursor: pointer;
+}
+
+#focusModal {
+  padding-right: 0 !important;
 }
 
 @media (max-width: 767.98px) {
