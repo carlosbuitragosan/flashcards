@@ -30,22 +30,6 @@ export const Navbar = () => {
     hideBurgerMenu();
   };
 
-  // collapses the continent dropdown when the main menu collapses
-  // useEffect(() => {
-  //   const navbarMenu = document.getElementById('navbarMenu');
-  //   const continentMenu = document.getElementById('continentMenu');
-
-  //   const onNavbarHidden = () => {
-  //     continentMenu?.classList.remove('show');
-  //   };
-
-  //   navbarMenu?.addEventListener('hidden.bs.collapse', onNavbarHidden);
-
-  //   return () => {
-  //     navbarMenu?.removeEventListener('hidden.bs.collapse', onNavbarHidden);
-  //   };
-  // });
-
   return (
     <nav className="navbar navbar-expand-md navbar-dark px-3 mt-2 align-items-start">
       <div className="nav-brand d-flex align-items-center gap-3">
@@ -74,44 +58,46 @@ export const Navbar = () => {
       {/* Collapsable content */}
       <div id="navbarMenu" className="collapse navbar-collapse bg-dark">
         <ul className="navbar-nav ms-md-auto d-flex align-items-center gap-3">
-          <li className="nav-item dropdown">
-            {/* Toggler for continent dropdown */}
-            <a
-              className="link-groupBy nav-link dropdown-toggle text-white pointer"
-              href="#"
-              role="button"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-            >
-              GROUP BY
-            </a>
-            <ul className="dropdown-menu dropdown-menu-dark">
-              {continents.map((continent) => (
-                <li
-                  key={continent.id}
-                  className="mb-3"
-                  onClick={() => onSelectContinent(continent.id)}
-                >
+          {!isFocusMode && (
+            <li className="nav-item dropdown">
+              {/* Toggler for continent dropdown */}
+              <a
+                className="link-groupBy nav-link dropdown-toggle text-white pointer"
+                href="#"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                GROUP BY
+              </a>
+              <ul className="dropdown-menu dropdown-menu-dark">
+                {continents.map((continent) => (
+                  <li
+                    key={continent.id}
+                    className="mb-3"
+                    onClick={() => onSelectContinent(continent.id)}
+                  >
+                    <span
+                      className={`dropdown-item text-white pointer ${continent.id === selectedContinentId ? 'text-decoration-underline' : ''}`}
+                      data-bs-toggle="collapse"
+                      data-bs-target="#continentMenu"
+                    >
+                      {continent.continent}
+                    </span>
+                  </li>
+                ))}
+                <li onClick={() => onSelectContinent(null)}>
                   <span
-                    className={`dropdown-item text-white pointer ${continent.id === selectedContinentId ? 'text-decoration-underline' : ''}`}
-                    data-bs-toggle="collapse"
+                    className={`dropdown-item pointer  ${selectedContinentId === null ? 'text-decoration-underline' : ''}`}
+                    data-bs-toggle="dropdown"
                     data-bs-target="#continentMenu"
                   >
-                    {continent.continent}
+                    Show All
                   </span>
                 </li>
-              ))}
-              <li onClick={() => onSelectContinent(null)}>
-                <span
-                  className={`dropdown-item pointer  ${selectedContinentId === null ? 'text-decoration-underline' : ''}`}
-                  data-bs-toggle="dropdown"
-                  data-bs-target="#continentMenu"
-                >
-                  Show All
-                </span>
-              </li>
-            </ul>
-          </li>
+              </ul>
+            </li>
+          )}
           <li className="nav-item">
             <button
               className="btn btn-secondary"

@@ -22,7 +22,7 @@
   cursor: pointer;
 }
 
-#focusModal {
+.modal-open {
   padding-right: 0 !important;
 }
 
