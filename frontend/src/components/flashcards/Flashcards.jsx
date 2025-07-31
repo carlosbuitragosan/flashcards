@@ -131,7 +131,13 @@ export const Flashcards = () => {
   return (
     <>
       <div className="flashcard-content d-flex justify-content-center align-items-center full-height bg-dark text-light">
-        <div className="card-wrapper d-flex flex-column justify-content-between align-items-center">
+        <div className="card-wrapper position-relative d-flex flex-column justify-content-between align-items-center">
+          {/* show tag for focus mode and No of cards left in session */}
+          {isFocusMode && (
+            <small className="focus-label position-absolute">
+              {'Focus: ' + (activeCards.length - currentIndex)}
+            </small>
+          )}
           <AnimatePresence mode="wait">
             <motion.div
               // triggers animations when card changes
@@ -168,7 +174,9 @@ export const Flashcards = () => {
                 {/* FRONT */}
                 {/* .card-face has backface-visibility: hidden so only this side is visible */}
                 <div className="card-face front position-absolute w-100 h-100 d-flex justify-content-center align-items-center">
-                  <small className="label position-absolute">Country</small>
+                  <small className="country-label position-absolute">
+                    Country
+                  </small>
 
                   <small className="deck-label position-absolute">
                     {activeCards[currentIndex]?.deck_id === selectedContinentId
@@ -185,7 +193,9 @@ export const Flashcards = () => {
 
                 {/* BACK */}
                 <div className="card-face back w-100 h-100 d-flex justify-content-center align-items-center">
-                  <small className="label position-absolute">Capital</small>
+                  <small className="country-label position-absolute">
+                    Capital
+                  </small>
 
                   <p className="card-name">
                     {activeCards[currentIndex]?.capital}
