@@ -46,7 +46,7 @@ export const useFlashcardStore = create((set, get) => ({
     });
   },
 
-  // Focus mode
+  // Start Focus mode
   startFocusMode: () => {
     const { cards } = get();
     const shuffled = [...cards];
@@ -63,6 +63,14 @@ export const useFlashcardStore = create((set, get) => ({
     set({
       focusCards,
       isFocusMode: true,
+      currentIndex: 0,
+    });
+  },
+
+  endFocusMode: () => {
+    set({
+      focusCards: [],
+      isFocusMode: false,
       currentIndex: 0,
     });
   },

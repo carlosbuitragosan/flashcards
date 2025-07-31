@@ -34,6 +34,7 @@ export const Flashcards = () => {
     isFocusMode,
     setIsFocusMode,
     startFocusMode,
+    endFocusMode,
   } = useFlashcardStore();
 
   // displays cards conditionally
@@ -121,7 +122,7 @@ export const Flashcards = () => {
   });
 
   // Starts focus mode with 10 random cards from deck
-  const handleFocus = () => {
+  const startFocus = () => {
     startFocusMode();
   };
 
@@ -206,7 +207,7 @@ export const Flashcards = () => {
                 // disable if cards are loading or animation is happening
                 disabled={activeCards.length === 0 || disableSlide}
               >
-                Next
+                NEXT
               </button>
             )}
           </div>
@@ -251,7 +252,7 @@ export const Flashcards = () => {
               <button
                 className="btn btn-secondary"
                 data-bs-dismiss="modal"
-                onClick={handleFocus}
+                onClick={startFocus}
               >
                 Start
               </button>

@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { toast } from 'react-toastify';
 import { useFlashcardStore } from '../../store/flashcardStore';
 import './navbar.css';
 
@@ -11,6 +12,7 @@ export const Navbar = () => {
     selectedContinentId,
     setSelectedContinentId,
     isFocusMode,
+    endFocusMode,
     setCurrentIndex,
   } = useFlashcardStore();
 
@@ -39,7 +41,6 @@ export const Navbar = () => {
     };
   });
 
-  console.log();
   return (
     <nav className="navbar navbar-expand-md navbar-dark px-3 mt-2 align-items-start">
       <div className="nav-brand d-flex align-items-center gap-3">
@@ -50,7 +51,7 @@ export const Navbar = () => {
           width="32"
           height="32"
         />
-        <h1 className="nav-title navbar-brand mb-0 h1">Country Flashcards</h1>
+        <h1 className="nav-title navbar-brand mb-0 h1">COUNTRY FLASHCARDS</h1>
       </div>
       {/* Toggler for mobile view */}
       <button
@@ -77,7 +78,7 @@ export const Navbar = () => {
               data-bs-toggle="dropdown"
               aria-expanded="false"
             >
-              Group by
+              GROUP BY
             </a>
             <ul className="dropdown-menu dropdown-menu-dark">
               {continents.map((continent) => (
@@ -101,7 +102,7 @@ export const Navbar = () => {
                 data-bs-target="#continentMenu"
               >
                 <li
-                  className={`pointer ${selectedContinentId === null ? 'text-decoration-underline' : ''}`}
+                  className={`pointer  ${selectedContinentId === null ? 'text-decoration-underline' : ''}`}
                   onClick={() => onSelectContinent(null)}
                 >
                   Show All
@@ -115,14 +116,16 @@ export const Navbar = () => {
               onClick={handleShuffle}
               disabled={cards.length === 0 || disableSlide || isFocusMode}
             >
-              Shuffle
+              SHUFFLE
             </button>
           </li>
           <li className="nav-item">
             <button
               className="btn btn-secondary"
-              data-bs-toggle="modal"
-              data-bs-target="#focusModal"
+              // Open modal or exit focus mode
+              data-bs-toggle={!isFocusMode ? 'modal' : undefined}
+              data-bs-target={!isFocusMode ? '#focusModal' : undefined}
+              onClick={isFocusMode ? endFocusMode : undefined}
               disabled={
                 cards.length === 0 ||
                 disableSlide ||
@@ -130,7 +133,7 @@ export const Navbar = () => {
                   ?.continent === 'Antarctic'
               }
             >
-              Focus Mode
+              {isFocusMode ? 'END FOCUS' : 'FOCUS'}
             </button>
           </li>
         </ul>

@@ -37,6 +37,11 @@
     background-color: #212529dd !important;
   }
 
+  .nav-title {
+    font-size: 1rem !important;
+    margin-top: 5px !important;
+  }
+
   .link-groupBy,
   .dropdown-item {
     text-align: center !important;
