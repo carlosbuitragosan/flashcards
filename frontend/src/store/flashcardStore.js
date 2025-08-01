@@ -1,6 +1,16 @@
 import { use } from 'react';
 import { create } from 'zustand';
 
+const shuffleArray = (arr) => {
+  const copy = [...arr];
+
+  for (let i = copy.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+  return copy;
+};
+
 export const useFlashcardStore = create((set, get) => ({
   cards: [],
   setCards: (newCards) => set({ cards: newCards }),
@@ -32,7 +42,7 @@ export const useFlashcardStore = create((set, get) => ({
     const menu = document.getElementById('navbarMenu');
     if (
       menu?.classList.contains('collapse') &&
-      //'show' is only applied when it's a burger menu, so it's safe to run the hide animation
+      //'show' is only applied when it's a burger menu, so it's safe to run the hide animation below
       menu.classList.contains('show')
     ) {
       document.querySelector('.navbar-toggler')?.click();
@@ -42,15 +52,9 @@ export const useFlashcardStore = create((set, get) => ({
   // Shuffle cards
   shuffleCards: () => {
     const { cards } = get();
-    const shuffled = [...cards];
 
-    //shuffle the array
-    for (let i = shuffled.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-    }
     set({
-      cards: shuffled,
+      cards: shuffleArray(cards),
       currentIndex: 0,
       isFlipped: false,
       disableSlide: true,
@@ -60,14 +64,8 @@ export const useFlashcardStore = create((set, get) => ({
   // Start Focus mode
   startFocusMode: () => {
     const { cards } = get();
-    const shuffled = [...cards];
 
-    //shuffle the array
-    for (let i = shuffled.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-    }
-
+    const shuffled = shuffleArray(cards);
     // Take the first 10 cards
     const focusCards = shuffled.slice(0, 10);
 

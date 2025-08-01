@@ -8,14 +8,14 @@ body {
 .flashcard-content {
   margin-top: 3rem;
 }
+
 .card-wrapper {
   width: 18rem;
   height: 25rem;
 }
 
-/* gives a natural 3d look */
-.flip-card-container {
-  perspective: 900px;
+.card-name {
+  text-align: center;
 }
 
 .flip-card {
@@ -23,6 +23,11 @@ body {
   /* allow 3d transformations so front/back can be layered */
   transform-style: preserve-3d;
   transition: transform 0.4s ease-in-out;
+}
+
+/* gives a natural 3d look */
+.flip-card-container {
+  perspective: 900px;
 }
 
 /* shared styles for both front and back */
@@ -74,9 +79,6 @@ body {
   text-align: center;
   width: 100px;
   clip-path: polygon(0 0, 100% 0, calc(100% - 10px) 50%, 100% 100%, 0 100%);
-}
-.card-name {
-  text-align: center;
 }
 
 .custom-toast .Toastify__progress-bar {

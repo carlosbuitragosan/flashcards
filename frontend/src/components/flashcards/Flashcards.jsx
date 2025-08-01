@@ -92,17 +92,28 @@ export const Flashcards = () => {
     setIsFlipped(false);
   }, [currentIndex]); // <- runs when card changes
 
+  //Show end of focus mode when last card is flipped
+  useEffect(() => {
+    const isLastCard = currentIndex === focusCards.length - 1;
+    if (isFocusMode && isLastCard && isFlipped) {
+      setShowConfetti(true);
+      setTimeout(() => setShowConfetti(false), 8000);
+      toast.success('Focus session complete!');
+    }
+  }, [isFocusMode, currentIndex, isFlipped, focusCards.length]);
+
   // Action for next card
   const handleNext = () => {
-    // End session in focus mode
+    // End focus mode
     if (isFocusMode && currentIndex === focusCards.length - 1) {
+      // Show end of session if user doesn't flip the last card
+      if (!isFlipped) {
+        toast('Focus session complete!');
+      }
       // renders cards array with current setting
       setIsFocusMode(false);
       // empty focus cards array and reset current index
       (setFocusCards([]), setCurrentIndex(0));
-      toast('Focus session complete!');
-      setShowConfetti(true);
-      setTimeout(() => setShowConfetti(false), 8000);
       return;
     }
     // Show next card in focus mode
@@ -131,7 +142,7 @@ export const Flashcards = () => {
   return (
     <>
       <div className="flashcard-content d-flex justify-content-center align-items-center full-height bg-dark text-light">
-        <div className="card-wrapper position-relative d-flex flex-column justify-content-between align-items-center">
+        <div className="card-wrapper position-relative d-flex flex-column justify-content-between ">
           {/* show tag for focus mode and No of cards left in session */}
           {isFocusMode && (
             <small className="focus-label position-absolute">
