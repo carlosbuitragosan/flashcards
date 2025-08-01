@@ -4,35 +4,7 @@ import { VitePWA } from 'vite-plugin-pwa';
 import path from 'path';
 
 export default defineConfig({
-  plugins: [
-    react(),
-    VitePWA({
-      registerType: 'autoUpdate',
-      workbox: {}, // <- this builds a default service worker
-      manifest: {
-        name: 'Country Flashcards',
-        short_name: 'Flashcards',
-        start_url: '/',
-        display: 'standalone',
-        theme_color: '#241f1f',
-        background_color: '#241f1f',
-        icons: [
-          {
-            src: '/logo/web-app-manifest-192x192.png',
-            sizes: '192x192',
-            type: 'image/png',
-            purpose: 'maskable',
-          },
-          {
-            src: '/logo/web-app-manifest-512x512.png',
-            sizes: '512x512',
-            type: 'image/png',
-            purpose: 'maskable',
-          },
-        ],
-      },
-    }),
-  ],
+  plugins: [react()],
   server: {
     proxy: {
       '/api': 'http://localhost:8000',
