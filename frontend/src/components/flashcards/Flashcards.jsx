@@ -100,7 +100,7 @@ export const Flashcards = () => {
       setTimeout(() => setShowConfetti(false), 8000);
       toast.success('Focus session complete!');
     }
-  }, [isFocusMode, currentIndex, isFlipped, focusCards.length]);
+  }, [isFocusMode, isFlipped]);
 
   // Action for next card
   const handleNext = () => {
