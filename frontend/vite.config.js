@@ -8,6 +8,7 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
+      workbox: {}, // <- this builds a default service worker
       manifest: {
         name: 'Country Flashcards',
         short_name: 'Flashcards',
