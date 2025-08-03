@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useSwipeable } from 'react-swipeable';
 import { toast } from 'react-toastify';
 import Confetti from 'react-confetti';
+import { Modal } from 'bootstrap/dist/js/bootstrap.bundle.min';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useFlashcardStore } from '../../store/flashcardStore';
 import {
@@ -12,11 +14,14 @@ import {
 import './flashcards.css';
 
 export const Flashcards = () => {
+  const [isLoading, setIsloading] = useState(true);
+  const navigate = useNavigate();
+
   // Detect touch capability
   const isTouchDevice =
     'ontouchstart' in window || navigator.maxTouchPoints > 0;
+
   const [showConfetti, setShowConfetti] = useState(false);
-  const [isLoading, setIsloading] = useState(true);
   const {
     cards,
     setCards,
@@ -31,17 +36,18 @@ export const Flashcards = () => {
     disableSlide,
     setDisableSlide,
     focusCards,
-    setFocusCards,
     isFocusMode,
-    setIsFocusMode,
-    startFocusMode,
     endFocusMode,
+    startFocusMode,
     hideBurgerMenu,
   } = useFlashcardStore();
-
   // displays cards conditionally
   const activeCards = isFocusMode ? focusCards : cards;
 
+  const showQuizModal = () => {
+    const quizModal = new Modal(document.getElementById('quizModal'));
+    quizModal.show();
+  };
   // runs once on component mount
   useEffect(() => {
     const init = async () => {
@@ -85,33 +91,34 @@ export const Flashcards = () => {
     loadCards();
   }, [selectedContinentId]);
 
+  // Reset card to its front face
   useEffect(() => {
-    // Reset card to its front face
     setIsFlipped(false);
   }, [currentIndex]); // <- runs when card changes
 
   //Show end of focus mode when last card is flipped
   useEffect(() => {
     const isLastCard = currentIndex === focusCards.length - 1;
+
     if (isFocusMode && isLastCard && isFlipped) {
       setShowConfetti(true);
       setTimeout(() => setShowConfetti(false), 8000);
-      toast.success('Focus session complete!');
+      // Show quiz modal
+      setTimeout(() => {
+        showQuizModal();
+      }, 3000);
+      return;
     }
   }, [isFocusMode, isFlipped]);
 
   // Action for next card
   const handleNext = () => {
+    const isLastCard = currentIndex === focusCards.length - 1;
+
     // End focus mode
-    if (isFocusMode && currentIndex === focusCards.length - 1) {
-      // Show end of session if user doesn't flip the last card
-      if (!isFlipped) {
-        toast('Focus session complete!');
-      }
-      // renders cards array with current setting
-      setIsFocusMode(false);
-      // empty focus cards array and reset current index
-      (setFocusCards([]), setCurrentIndex(0));
+    if (isFocusMode && isLastCard) {
+      // Show quiz modal
+      showQuizModal();
       return;
     }
     // Show next card in focus mode
@@ -279,6 +286,48 @@ export const Flashcards = () => {
                 onClick={startFocus}
               >
                 START
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Quiz modal */}
+      <div
+        className="modal fade"
+        id="quizModal"
+        tabIndex="-1"
+        aria-labelledby="focusModalLabel"
+        aria-hidden="true"
+      >
+        <div className="modal-dialog modal-dialog-centered">
+          <div className="modal-content bg-dark text-light">
+            <div className="modal-header">
+              <h5 className="modal-title">Quiz</h5>
+              <button
+                type="button"
+                className="btn-close btn-close-white"
+                data-bs-dismiss="modal"
+              ></button>
+            </div>
+            <div className="modal-body">
+              <p>Focus session complete!</p>
+              <p>Take quiz?</p>
+            </div>
+            <div className="modal-footer">
+              <button
+                className="btn btn-secondary"
+                data-bs-dismiss="modal"
+                onClick={() => navigate('quiz')}
+              >
+                YES
+              </button>
+              <button
+                className="btn btn-secondary"
+                data-bs-dismiss="modal"
+                onClick={endFocusMode}
+              >
+                NO
               </button>
             </div>
           </div>

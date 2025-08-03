@@ -1,8 +1,11 @@
-import { useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useFlashcardStore } from '../../store/flashcardStore';
 import './navbar.css';
 
 export const Navbar = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const isQuizRoute = location.pathname === '/quiz';
   const {
     cards,
     shuffleCards,
@@ -17,22 +20,40 @@ export const Navbar = () => {
     setIsFlipped,
   } = useFlashcardStore();
 
+  // Home page navigation
+  const handleLogoClick = () => {
+    if (isQuizRoute) {
+      endFocusMode();
+    }
+    navigate('/');
+  };
+
+  // Shuffle cards
   const handleShuffle = () => {
     shuffleCards();
     hideBurgerMenu();
   };
 
+  // Select cards from a specific region
   const onSelectContinent = (id) => {
     setSelectedContinentId(id);
     setCurrentIndex(0);
-    //In cases where currentIndex is already 0 (same index)
+    //if currentIndex is already 0, the card needs to be flipped to the front
     setIsFlipped(false);
     hideBurgerMenu();
   };
 
+  const handleExitQuiz = () => {
+    endFocusMode();
+    navigate('/');
+  };
+
   return (
     <nav className="navbar navbar-expand-md navbar-dark px-3 mt-2 align-items-start">
-      <div className="nav-brand d-flex align-items-center gap-3">
+      <div
+        className="nav-brand d-flex align-items-center gap-3"
+        onClick={handleLogoClick}
+      >
         <img
           className="nav-logo"
           src="/favicon.ico"
@@ -58,70 +79,80 @@ export const Navbar = () => {
       {/* Collapsable content */}
       <div id="navbarMenu" className="collapse navbar-collapse bg-dark">
         <ul className="navbar-nav ms-md-auto d-flex align-items-center justify-content-center gap-3">
-          {!isFocusMode && (
-            <li className="nav-item dropdown">
-              {/* Toggler for continent dropdown */}
+          <li className="nav-item dropdown">
+            {/* Toggler for continent dropdown */}
+            {!isQuizRoute && (
               <button
                 className="btn btn-secondary dropdown-toggle text-white pointer"
                 type="button"
                 data-bs-toggle="dropdown"
                 aria-expanded="false"
+                disabled={isFocusMode}
               >
                 GROUP BY
               </button>
-              <ul className="dropdown-menu dropdown-menu-dark">
-                {continents.map((continent) => (
-                  <li
-                    key={continent.id}
-                    className="mb-3"
-                    onClick={() => onSelectContinent(continent.id)}
-                  >
-                    <span
-                      className={`dropdown-item text-white pointer ${continent.id === selectedContinentId ? 'text-decoration-underline' : ''}`}
-                      data-bs-toggle="collapse"
-                      data-bs-target="#continentMenu"
-                    >
-                      {continent.continent}
-                    </span>
-                  </li>
-                ))}
-                <li onClick={() => onSelectContinent(null)}>
+            )}
+            <ul className="dropdown-menu dropdown-menu-dark">
+              {continents.map((continent) => (
+                <li
+                  key={continent.id}
+                  className="mb-3"
+                  onClick={() => onSelectContinent(continent.id)}
+                >
                   <span
-                    className={`dropdown-item pointer  ${selectedContinentId === null ? 'text-decoration-underline' : ''}`}
-                    data-bs-toggle="dropdown"
+                    className={`dropdown-item text-white pointer ${continent.id === selectedContinentId ? 'text-decoration-underline' : ''}`}
+                    data-bs-toggle="collapse"
                     data-bs-target="#continentMenu"
                   >
-                    Show All
+                    {continent.continent}
                   </span>
                 </li>
-              </ul>
-            </li>
-          )}
-          <li className="nav-item">
-            <button
-              className="btn btn-secondary"
-              onClick={handleShuffle}
-              disabled={cards.length === 0 || disableSlide || isFocusMode}
-            >
-              SHUFFLE
-            </button>
+              ))}
+              <li onClick={() => onSelectContinent(null)}>
+                <span
+                  className={`dropdown-item pointer  ${selectedContinentId === null ? 'text-decoration-underline' : ''}`}
+                  data-bs-toggle="dropdown"
+                  data-bs-target="#continentMenu"
+                >
+                  Show All
+                </span>
+              </li>
+            </ul>
           </li>
           <li className="nav-item">
-            <button
-              className="btn btn-secondary"
-              // Open modal or exit focus mode
-              data-bs-toggle={!isFocusMode ? 'modal' : undefined}
-              data-bs-target={!isFocusMode ? '#focusModal' : undefined}
-              onClick={isFocusMode ? endFocusMode : undefined}
-              disabled={
-                cards.length === 0 ||
-                disableSlide ||
-                continents.find((c) => c.id === selectedContinentId)
-                  ?.continent === 'Antarctic'
-              }
-            >
-              {isFocusMode ? 'END FOCUS' : 'FOCUS'}
-            </button>
+            {!isQuizRoute && (
+              <button
+                className="btn btn-secondary"
+                onClick={handleShuffle}
+                disabled={cards.length === 0 || disableSlide || isFocusMode}
+              >
+                SHUFFLE
+              </button>
+            )}
+          </li>
+          <li className="nav-item">
+            {/* dispaly focus / quiz button depending on the route */}
+            {!isQuizRoute ? (
+              <button
+                className="btn btn-secondary"
+                // Open modal or exit focus mode
+                data-bs-toggle={!isFocusMode ? 'modal' : undefined}
+                data-bs-target={!isFocusMode ? '#focusModal' : undefined}
+                onClick={isFocusMode ? endFocusMode : undefined}
+                disabled={
+                  cards.length === 0 ||
+                  disableSlide ||
+                  continents.find((c) => c.id === selectedContinentId)
+                    ?.continent === 'Antarctic'
+                }
+              >
+                {isFocusMode ? 'END FOCUS' : 'FOCUS'}
+              </button>
+            ) : (
+              <button className="btn btn-secondary" onClick={handleExitQuiz}>
+                Exit Quiz
+              </button>
+            )}
           </li>
         </ul>
       </div>
