@@ -16,6 +16,7 @@ export const Flashcards = () => {
   const isTouchDevice =
     'ontouchstart' in window || navigator.maxTouchPoints > 0;
   const [showConfetti, setShowConfetti] = useState(false);
+  const [isLoading, setIsloading] = useState(true);
   const {
     cards,
     setCards,
@@ -61,11 +62,6 @@ export const Flashcards = () => {
     init();
   }, []);
 
-  useEffect(() => {
-    // Reset card to its front face
-    setIsFlipped(false);
-  }, [currentIndex]); // <- runs when card changes
-
   // Runs every time a continent is selected
   useEffect(() => {
     const loadCards = async () => {
@@ -80,6 +76,8 @@ export const Flashcards = () => {
 
         // Save to the store
         setCards(newCards);
+        //
+        setIsloading(false);
       } catch (err) {
         console.error('Error loading cards: ', err);
       }
@@ -138,6 +136,9 @@ export const Flashcards = () => {
     startFocusMode();
     hideBurgerMenu();
   };
+
+  // wait for data to load
+  if (isLoading) return null;
 
   return (
     <>
