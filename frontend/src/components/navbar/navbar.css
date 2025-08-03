@@ -42,7 +42,6 @@
     margin-top: 5px !important;
   }
 
-  .link-groupBy,
   .dropdown-item {
     text-align: center !important;
   }
@@ -50,5 +49,10 @@
   .dropdown-menu {
     background-color: #21252910 !important;
     border: none !important;
+  }
+
+  /* Prevent 'group by' button from shifting to the left when clicked */
+  .dropdown-toggle.show {
+    margin-left: 0 !important;
   }
 }

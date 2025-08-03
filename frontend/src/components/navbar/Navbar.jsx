@@ -57,19 +57,18 @@ export const Navbar = () => {
 
       {/* Collapsable content */}
       <div id="navbarMenu" className="collapse navbar-collapse bg-dark">
-        <ul className="navbar-nav ms-md-auto d-flex align-items-center gap-3">
+        <ul className="navbar-nav ms-md-auto d-flex align-items-center justify-content-center gap-3">
           {!isFocusMode && (
             <li className="nav-item dropdown">
               {/* Toggler for continent dropdown */}
-              <a
-                className="link-groupBy nav-link dropdown-toggle text-white pointer"
-                href="#"
-                role="button"
+              <button
+                className="btn btn-secondary dropdown-toggle text-white pointer"
+                type="button"
                 data-bs-toggle="dropdown"
                 aria-expanded="false"
               >
                 GROUP BY
-              </a>
+              </button>
               <ul className="dropdown-menu dropdown-menu-dark">
                 {continents.map((continent) => (
                   <li
