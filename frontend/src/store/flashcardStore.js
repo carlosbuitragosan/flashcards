@@ -1,7 +1,7 @@
 import { use } from 'react';
 import { create } from 'zustand';
 
-const shuffleArray = (arr) => {
+export const shuffleArray = (arr) => {
   const copy = [...arr];
 
   for (let i = copy.length - 1; i > 0; i--) {
@@ -26,6 +26,9 @@ export const useFlashcardStore = create((set, get) => ({
 
   isFlipped: false,
   setIsFlipped: (value) => set({ isFlipped: value }),
+
+  hasShownEndingFocus: false,
+  setHasShownEndingFocus: (value) => set({ hasShownEndingFocus: value }),
 
   disableSlide: false,
   setDisableSlide: (value) => set({ disableSlide: value }),
@@ -82,6 +85,7 @@ export const useFlashcardStore = create((set, get) => ({
     set({
       focusCards: [],
       isFocusMode: false,
+      hasShownEndingFocus: false,
       currentIndex: 0,
     });
   },

@@ -12,15 +12,16 @@ export default function App() {
         <Route path="/" element={<Flashcards />} />
         <Route path="/quiz" element={<Quiz />} />
       </Routes>
-      <ToastContainer
+      {/* <ToastContainer
         toastClassName="custom-toast"
+        className="custom-toast-container"
         position="bottom-center"
         theme="dark"
         type="success"
         autoClose={3000}
         transition={Slide}
         pauseOnFocusLoss={false}
-      />
+      /> */}
     </>
   );
 }

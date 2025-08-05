@@ -81,8 +81,8 @@ body {
   clip-path: polygon(0 0, 100% 0, calc(100% - 10px) 50%, 100% 100%, 0 100%);
 }
 
-.custom-toast .Toastify__progress-bar {
-  background: #28b352 !important;
+.modal-backdrop {
+  display: none !important;
 }
 
 @media screen and (min-width: 768px) {

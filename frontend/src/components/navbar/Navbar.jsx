@@ -44,8 +44,8 @@ export const Navbar = () => {
   };
 
   const handleExitQuiz = () => {
-    endFocusMode();
     navigate('/');
+    endFocusMode();
   };
 
   return (
@@ -119,6 +119,7 @@ export const Navbar = () => {
               </li>
             </ul>
           </li>
+
           <li className="nav-item">
             {!isQuizRoute && (
               <button
@@ -130,9 +131,10 @@ export const Navbar = () => {
               </button>
             )}
           </li>
-          <li className="nav-item">
-            {/* dispaly focus / quiz button depending on the route */}
-            {!isQuizRoute ? (
+
+          {/* Focus mode button */}
+          {!isQuizRoute && (
+            <li className="nav-item">
               <button
                 className="btn btn-secondary"
                 // Open modal or exit focus mode
@@ -148,12 +150,17 @@ export const Navbar = () => {
               >
                 {isFocusMode ? 'END FOCUS' : 'FOCUS'}
               </button>
-            ) : (
+            </li>
+          )}
+
+          {/* Exit Quiz button */}
+          {isQuizRoute && (
+            <li className="nav-item">
               <button className="btn btn-secondary" onClick={handleExitQuiz}>
-                Exit Quiz
+                EXIT QUIZ
               </button>
-            )}
-          </li>
+            </li>
+          )}
         </ul>
       </div>
     </nav>

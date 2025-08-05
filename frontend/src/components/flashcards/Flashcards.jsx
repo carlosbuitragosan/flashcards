@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSwipeable } from 'react-swipeable';
-import { toast } from 'react-toastify';
-import Confetti from 'react-confetti';
+import Confetti from 'react-confetti-boom';
 import { Modal } from 'bootstrap/dist/js/bootstrap.bundle.min';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useFlashcardStore } from '../../store/flashcardStore';
@@ -33,6 +32,8 @@ export const Flashcards = () => {
     setCurrentIndex,
     isFlipped,
     setIsFlipped,
+    hasShownEndingFocus,
+    setHasShownEndingFocus,
     disableSlide,
     setDisableSlide,
     focusCards,
@@ -98,37 +99,26 @@ export const Flashcards = () => {
 
   //Show end of focus mode when last card is flipped
   useEffect(() => {
-    const isLastCard = currentIndex === focusCards.length - 1;
+    const isLastCard = currentIndex === activeCards.length - 1;
 
-    if (isFocusMode && isLastCard && isFlipped) {
+    if (isFocusMode && isLastCard && isFlipped && !hasShownEndingFocus) {
       setShowConfetti(true);
+      setTimeout(() => showQuizModal(), 3000);
       setTimeout(() => setShowConfetti(false), 8000);
-      // Show quiz modal
-      setTimeout(() => {
-        showQuizModal();
-      }, 3000);
+      setHasShownEndingFocus(true);
       return;
     }
-  }, [isFocusMode, isFlipped]);
+  }, [isFocusMode, isFlipped, hasShownEndingFocus]);
 
   // Action for next card
   const handleNext = () => {
-    const isLastCard = currentIndex === focusCards.length - 1;
+    const isLastCard = currentIndex === activeCards.length - 1;
 
-    // End focus mode
-    if (isFocusMode && isLastCard) {
-      // Show quiz modal
-      showQuizModal();
-      return;
-    }
-    // Show next card in focus mode
-    if (isFocusMode) {
-      setCurrentIndex(currentIndex + 1);
-    }
-    // ** Normal mode **
-    // calculate next index; loops back to 0
-    const nextIndex = (currentIndex + 1) % cards.length;
-    // update current index to show next card
+    // Block interaction at end of  focus mode
+    if (isFocusMode && isLastCard) return;
+
+    const nextIndex = (currentIndex + 1) % activeCards.length;
+
     setCurrentIndex(nextIndex);
   };
 
@@ -236,7 +226,11 @@ export const Flashcards = () => {
                 className="btn btn-secondary w-100"
                 onClick={handleNext}
                 // disable if cards are loading or animation is happening
-                disabled={activeCards.length === 0 || disableSlide}
+                disabled={
+                  activeCards.length === 0 ||
+                  disableSlide ||
+                  (isFocusMode && currentIndex === focusCards.length - 1)
+                }
               >
                 NEXT
               </button>
@@ -277,15 +271,15 @@ export const Flashcards = () => {
               </p>
             </div>
             <div className="modal-footer">
-              <button className="btn btn-secondary" data-bs-dismiss="modal">
-                CANCEL
-              </button>
               <button
                 className="btn btn-secondary"
                 data-bs-dismiss="modal"
                 onClick={startFocus}
               >
                 START
+              </button>
+              <button className="btn btn-secondary" data-bs-dismiss="modal">
+                CANCEL
               </button>
             </div>
           </div>
@@ -337,10 +331,18 @@ export const Flashcards = () => {
       {/* Display confetti */}
       {showConfetti && (
         <Confetti
-          numberOfPieces={800}
-          initialVelocityY={-15}
-          gravity={0.1}
-          recycle={false}
+          mode="boom"
+          particleCount={300}
+          shapeSize={9}
+          colors={[
+            '#FF0000',
+            '#FF7F00',
+            '#FFFF00',
+            '#00FF00',
+            '#0000FF',
+            '#4B0082',
+            '#8B00FF',
+          ]}
         />
       )}
     </>
