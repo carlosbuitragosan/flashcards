@@ -1,45 +1,69 @@
-import { useRef } from 'react';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useFlashcardStore } from '../../store/flashcardStore';
 import { shuffleArray } from '../../store/flashcardStore';
 import './quiz.css';
 
 export const Quiz = () => {
-  const { focusCards } = useFlashcardStore();
-  // UseRef creates an object that persists across renders
-  const shuffledRef = useRef(shuffleArray(focusCards));
-  const indexRef = useRef(0);
+  const navigate = useNavigate();
+  const { quizDeck, quizIndex, setQuizIndex, endFocusMode } =
+    useFlashcardStore();
+  const [answerOptions, setAnswerOptions] = useState([]);
+  const [selectedAnswerId, setSelectedAnswerId] = useState(null);
 
-  const getNewCard = () => {
-    const card = shuffledRef.current[indexRef.current];
-    indexRef.current++;
+  const currentCard = quizDeck[quizIndex];
 
-    if (indexRef.current >= shuffledRef.current.length) {
-      shuffledRef.current = shuffleArray(focusCards);
-      indexRef.current = 0;
-    }
+  useEffect(() => {
+    if (!currentCard) return;
 
-    return card;
+    const incorrectOptions = shuffleArray(quizDeck)
+      .filter((c) => c !== currentCard)
+      .slice(0, 3);
+
+    const allOptions = shuffleArray([currentCard, ...incorrectOptions]);
+    setAnswerOptions(allOptions);
+    setSelectedAnswerId(null);
+  }, [currentCard]);
+
+  const handleClick = (cardId) => {
+    setSelectedAnswerId(cardId);
+    setTimeout(() => {
+      if (quizIndex === 2) {
+        endFocusMode();
+        navigate('/');
+        setQuizIndex(0);
+      } else {
+        setQuizIndex(quizIndex + 1);
+      }
+    }, 1400);
   };
 
-  const targetCard = getNewCard();
-
-  const incorrectOptions = shuffleArray(focusCards)
-    .filter((card) => card !== targetCard)
-    .slice(0, 3);
-
-  const answerChoices = shuffleArray([targetCard, ...incorrectOptions]);
-
+  console.log('current card: ', currentCard.country);
+  console.log('quiz deck: ', quizDeck);
+  console.log('quiz Index: ', quizIndex);
   return (
     <div className="d-flex justify-content-center align-items-center full-height bg-dark text-light mt-3">
       <div className="quiz-wrapper position-relative d-flex flex-column justify-content-between ">
         <div className="quiz-container position-absolute w-100 h-100 d-flex flex-column justify-content-center ">
           <small>The capital of</small>
-          <p className="mb-5">{targetCard.country} is:</p>
+          <p className="mb-5">
+            {currentCard?.country}
+            <small> is:</small>
+          </p>
           <div className="d-flex flex-column gap-4">
-            {answerChoices.map((card) => (
+            {answerOptions.map((card) => (
               <button
                 key={card.id}
-                className="quiz-answer-btn btn btn-secondary w-100"
+                className={`quiz-answer-btn btn ${
+                  selectedAnswerId === null
+                    ? 'btn-dark'
+                    : card.id === currentCard.id
+                      ? 'btn-success'
+                      : card.id === selectedAnswerId
+                        ? 'btn-danger'
+                        : 'btn-dark'
+                } w-100`}
+                onClick={() => handleClick(card.id)}
               >
                 {card.capital}
               </button>

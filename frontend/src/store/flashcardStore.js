@@ -89,6 +89,18 @@ export const useFlashcardStore = create((set, get) => ({
       currentIndex: 0,
     });
   },
+
+  quizDeck: [],
+  setQuizDeck: (newDeck) => set({ quizDeck: newDeck }),
+
+  quizIndex: 0,
+  setQuizIndex: (value) => set({ quizIndex: value }),
+
+  startQuiz: () => {
+    const { focusCards } = get();
+    const shuffled = shuffleArray(focusCards);
+    set({ quizDeck: shuffled });
+  },
 }));
 
 // ** LOCAL STORAGE **

@@ -13,8 +13,7 @@
   font-size: 1.5rem;
 }
 
-/* .quiz-answers {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-} */
+.btn-dark {
+  background-color: rgb(91, 97, 97) !important;
+  border: none !important;
+}

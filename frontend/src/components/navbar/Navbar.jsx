@@ -83,7 +83,7 @@ export const Navbar = () => {
             {/* Toggler for continent dropdown */}
             {!isQuizRoute && (
               <button
-                className="btn btn-secondary dropdown-toggle text-white pointer"
+                className="btn btn-styled dropdown-toggle text-white pointer"
                 type="button"
                 data-bs-toggle="dropdown"
                 aria-expanded="false"
@@ -123,7 +123,7 @@ export const Navbar = () => {
           <li className="nav-item">
             {!isQuizRoute && (
               <button
-                className="btn btn-secondary"
+                className="btn btn-styled text-white"
                 onClick={handleShuffle}
                 disabled={cards.length === 0 || disableSlide || isFocusMode}
               >
@@ -136,7 +136,7 @@ export const Navbar = () => {
           {!isQuizRoute && (
             <li className="nav-item">
               <button
-                className="btn btn-secondary"
+                className="btn btn-styled text-white"
                 // Open modal or exit focus mode
                 data-bs-toggle={!isFocusMode ? 'modal' : undefined}
                 data-bs-target={!isFocusMode ? '#focusModal' : undefined}
@@ -156,7 +156,10 @@ export const Navbar = () => {
           {/* Exit Quiz button */}
           {isQuizRoute && (
             <li className="nav-item">
-              <button className="btn btn-secondary" onClick={handleExitQuiz}>
+              <button
+                className="btn btn-styled text-white"
+                onClick={handleExitQuiz}
+              >
                 EXIT QUIZ
               </button>
             </li>

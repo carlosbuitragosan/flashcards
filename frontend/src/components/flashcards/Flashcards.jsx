@@ -41,6 +41,7 @@ export const Flashcards = () => {
     endFocusMode,
     startFocusMode,
     hideBurgerMenu,
+    startQuiz,
   } = useFlashcardStore();
   // displays cards conditionally
   const activeCards = isFocusMode ? focusCards : cards;
@@ -103,7 +104,7 @@ export const Flashcards = () => {
 
     if (isFocusMode && isLastCard && isFlipped && !hasShownEndingFocus) {
       setShowConfetti(true);
-      setTimeout(() => showQuizModal(), 3000);
+      setTimeout(() => showQuizModal(), 2000);
       setTimeout(() => setShowConfetti(false), 8000);
       setHasShownEndingFocus(true);
       return;
@@ -134,6 +135,10 @@ export const Flashcards = () => {
     hideBurgerMenu();
   };
 
+  const handleStartQuiz = () => {
+    navigate('quiz');
+    startQuiz();
+  };
   // wait for data to load
   if (isLoading) return null;
 
@@ -223,7 +228,7 @@ export const Flashcards = () => {
           <div className="card-footer mt-3 w-100">
             {!isTouchDevice && (
               <button
-                className="btn btn-secondary w-100"
+                className="btn btn-styled text-white w-100"
                 onClick={handleNext}
                 // disable if cards are loading or animation is happening
                 disabled={
@@ -272,13 +277,16 @@ export const Flashcards = () => {
             </div>
             <div className="modal-footer">
               <button
-                className="btn btn-secondary"
+                className="btn btn-styled text-white"
                 data-bs-dismiss="modal"
                 onClick={startFocus}
               >
                 START
               </button>
-              <button className="btn btn-secondary" data-bs-dismiss="modal">
+              <button
+                className="btn btn-styled text-white"
+                data-bs-dismiss="modal"
+              >
                 CANCEL
               </button>
             </div>
@@ -310,14 +318,14 @@ export const Flashcards = () => {
             </div>
             <div className="modal-footer">
               <button
-                className="btn btn-secondary"
+                className="btn btn-styled text-white"
                 data-bs-dismiss="modal"
-                onClick={() => navigate('quiz')}
+                onClick={handleStartQuiz}
               >
                 YES
               </button>
               <button
-                className="btn btn-secondary"
+                className="btn btn-styled text-white"
                 data-bs-dismiss="modal"
                 onClick={endFocusMode}
               >
