@@ -96,6 +96,9 @@ export const useFlashcardStore = create((set, get) => ({
   quizIndex: 0,
   setQuizIndex: (value) => set({ quizIndex: value }),
 
+  quizType: null,
+  setQuizType: (value) => set({ quizType: value }),
+
   startQuiz: () => {
     const { focusCards } = get();
     const shuffled = shuffleArray(focusCards);

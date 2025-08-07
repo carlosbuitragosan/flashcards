@@ -6,66 +6,104 @@ import './quiz.css';
 
 export const Quiz = () => {
   const navigate = useNavigate();
-  const { quizDeck, quizIndex, setQuizIndex, endFocusMode } =
-    useFlashcardStore();
+  const {
+    quizDeck,
+    quizIndex,
+    setQuizIndex,
+    quizType,
+    setQuizType,
+    endFocusMode,
+  } = useFlashcardStore();
+  // Store the shuffled answer options for the current question
   const [answerOptions, setAnswerOptions] = useState([]);
+  // Track the answer the user selected
   const [selectedAnswerId, setSelectedAnswerId] = useState(null);
 
+  // Current quiz card, based on current index
   const currentCard = quizDeck[quizIndex];
 
+  // When the current card changes, generate new answer options
   useEffect(() => {
     if (!currentCard) return;
 
+    // Get 3 incorrect options
     const incorrectOptions = shuffleArray(quizDeck)
       .filter((c) => c !== currentCard)
       .slice(0, 3);
 
+    // Combine correct card with incorrect opotions
     const allOptions = shuffleArray([currentCard, ...incorrectOptions]);
+
+    // Set the answer options and reset selected answer
     setAnswerOptions(allOptions);
     setSelectedAnswerId(null);
   }, [currentCard]);
 
   const handleClick = (cardId) => {
+    // Track the selected answer
     setSelectedAnswerId(cardId);
     setTimeout(() => {
-      if (quizIndex === 2) {
+      // End quiz after 4 questions
+      if (quizIndex === 3) {
+        // Reset quiz related state
         endFocusMode();
         navigate('/');
+        // Reset index for future quizzes
         setQuizIndex(0);
+        setQuizType(null);
       } else {
+        // Proceed to next question
         setQuizIndex(quizIndex + 1);
       }
-    }, 1400);
+    }, 1000);
   };
 
-  console.log('current card: ', currentCard.country);
-  console.log('quiz deck: ', quizDeck);
-  console.log('quiz Index: ', quizIndex);
   return (
     <div className="d-flex justify-content-center align-items-center full-height bg-dark text-light mt-3">
       <div className="quiz-wrapper position-relative d-flex flex-column justify-content-between ">
         <div className="quiz-container position-absolute w-100 h-100 d-flex flex-column justify-content-center ">
-          <small>The capital of</small>
-          <p className="mb-5">
-            {currentCard?.country}
-            <small> is:</small>
-          </p>
+          <small className="quiz-question">
+            {quizType === 'capitals'
+              ? 'What is the capital of: '
+              : quizType === 'countries'
+                ? 'Which country has this capital: '
+                : quizType === 'flags'
+                  ? 'Identify the flag'
+                  : ''}
+          </small>
+
+          {quizType === 'capitals' ? (
+            <p className="mb-5">{currentCard?.country}</p>
+          ) : quizType === 'countries' ? (
+            <p className="mb-5">{currentCard?.capital}</p>
+          ) : quizType === 'flags' ? (
+            <img className="quiz-flag" src={currentCard?.flag} />
+          ) : (
+            ''
+          )}
+
           <div className="d-flex flex-column gap-4">
             {answerOptions.map((card) => (
               <button
                 key={card.id}
                 className={`quiz-answer-btn btn ${
-                  selectedAnswerId === null
+                  selectedAnswerId === null // No answer selected yet
                     ? 'btn-dark'
-                    : card.id === currentCard.id
+                    : card.id === currentCard.id // Correct answer
                       ? 'btn-success'
-                      : card.id === selectedAnswerId
+                      : card.id === selectedAnswerId // wrong answer
                         ? 'btn-danger'
                         : 'btn-dark'
                 } w-100`}
                 onClick={() => handleClick(card.id)}
               >
-                {card.capital}
+                {quizType == 'capitals'
+                  ? card.capital
+                  : quizType === 'countries'
+                    ? card.country
+                    : quizType === 'flags'
+                      ? card.country
+                      : ''}
               </button>
             ))}
           </div>

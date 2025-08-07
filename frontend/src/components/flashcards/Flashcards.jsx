@@ -42,6 +42,7 @@ export const Flashcards = () => {
     startFocusMode,
     hideBurgerMenu,
     startQuiz,
+    setQuizType,
   } = useFlashcardStore();
   // displays cards conditionally
   const activeCards = isFocusMode ? focusCards : cards;
@@ -135,7 +136,8 @@ export const Flashcards = () => {
     hideBurgerMenu();
   };
 
-  const handleStartQuiz = () => {
+  const handleStartQuiz = (quizType) => {
+    setQuizType(quizType);
     navigate('quiz');
     startQuiz();
   };
@@ -314,22 +316,36 @@ export const Flashcards = () => {
             </div>
             <div className="modal-body">
               <p>Focus session complete!</p>
-              <p>Take quiz?</p>
+              <p>Test your knowledge of: </p>
             </div>
-            <div className="modal-footer">
+            <div className="quiz-modal-footer modal-footer">
               <button
-                className="btn btn-styled text-white"
+                className="btn btn-styled text-white flex-fill"
                 data-bs-dismiss="modal"
-                onClick={handleStartQuiz}
+                onClick={() => handleStartQuiz('capitals')}
               >
-                YES
+                CAPITALS
               </button>
               <button
-                className="btn btn-styled text-white"
+                className="btn btn-styled text-white flex-fill"
+                data-bs-dismiss="modal"
+                onClick={() => handleStartQuiz('countries')}
+              >
+                COUNTRIES
+              </button>
+              <button
+                className="btn btn-styled text-white flex-fill"
+                data-bs-dismiss="modal"
+                onClick={() => handleStartQuiz('flags')}
+              >
+                FLAGS
+              </button>
+              <button
+                className="btn btn-styled text-white flex-fill"
                 data-bs-dismiss="modal"
                 onClick={endFocusMode}
               >
-                NO
+                EXIT
               </button>
             </div>
           </div>
