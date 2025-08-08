@@ -43,12 +43,14 @@ export const useFlashcardStore = create((set, get) => ({
 
   hideBurgerMenu: () => {
     const menu = document.getElementById('navbarMenu');
+    const toggler = document.querySelector('.navbar-toggler');
     if (
+      menu &&
+      toggler &&
       menu?.classList.contains('collapse') &&
-      //'show' is only applied when it's a burger menu, so it's safe to run the hide animation below
       menu.classList.contains('show')
     ) {
-      document.querySelector('.navbar-toggler')?.click();
+      toggler.click();
     }
   },
 

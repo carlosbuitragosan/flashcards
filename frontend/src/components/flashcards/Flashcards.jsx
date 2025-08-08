@@ -44,6 +44,7 @@ export const Flashcards = () => {
     startQuiz,
     setQuizType,
   } = useFlashcardStore();
+
   // displays cards conditionally
   const activeCards = isFocusMode ? focusCards : cards;
 
@@ -51,6 +52,7 @@ export const Flashcards = () => {
     const quizModal = new Modal(document.getElementById('quizModal'));
     quizModal.show();
   };
+
   // runs once on component mount
   useEffect(() => {
     const init = async () => {
@@ -144,6 +146,7 @@ export const Flashcards = () => {
   // wait for data to load
   if (isLoading) return null;
 
+  console.log(cards.find((c) => c.country === 'United Kingdom'));
   return (
     <>
       <div className="flashcard-content d-flex justify-content-center align-items-center full-height bg-dark text-light">
