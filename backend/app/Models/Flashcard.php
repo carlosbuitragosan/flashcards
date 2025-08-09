@@ -9,5 +9,5 @@ class Flashcard extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['country', 'capital', 'deck_id', 'flag', 'flag_alt'];
+    protected $fillable = ['country', 'capital', 'deck_id', 'flag', 'flag_alt', 'code'];
 }

@@ -146,7 +146,7 @@ export const Flashcards = () => {
   // wait for data to load
   if (isLoading) return null;
 
-  console.log(cards.find((c) => c.country === 'United Kingdom'));
+  console.log(cards.find((c) => c.country === 'Colombia'));
   return (
     <>
       <div className="flashcard-content d-flex justify-content-center align-items-center full-height bg-dark text-light">

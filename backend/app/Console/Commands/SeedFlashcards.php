@@ -15,7 +15,7 @@ class SeedFlashcards extends Command
 
     public function handle()
     {
-        $apiUrl = 'https://restcountries.com/v3.1/all?fields=name,capital,region,flags';
+        $apiUrl = 'https://restcountries.com/v3.1/all?fields=name,capital,region,flags,cca2';
 
         $this->info('Fetching country data...');
         $response = Http::get($apiUrl);
@@ -45,13 +45,16 @@ class SeedFlashcards extends Command
             $deck = Deck::firstOrCreate(['continent' => $region]);
 
             try {
-                Flashcard::create([
-                    'country' => $country['name']['common'],
+                Flashcard::updateOrCreate(
+                    ['country' => $country['name']['common']],
+                    [
+                    'code' => $country['cca2'] ?? null,
                     'capital' => $country['capital'][0],
                     'deck_id' => $deck->id,
                     'flag' => $country['flags']['svg'] ?? null,
                     'flag_alt' => $country['flags']['alt'] ?? null,
-                ]);
+                ]
+                );
                 $inserted++;
             } catch (\Exception $e) {
                 $skipped++;
