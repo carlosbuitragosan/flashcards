@@ -77,7 +77,19 @@ export const Quiz = () => {
           ) : quizType === 'countries' ? (
             <p className="mb-5">{currentCard?.capital}</p>
           ) : quizType === 'flags' ? (
-            <img className="quiz-flag" src={currentCard?.flag} />
+            <img
+              src={
+                currentCard.code
+                  ? `/flags/${currentCard.code.toLowerCase()}.svg`
+                  : currentCard?.flag
+              }
+              onError={(e) => {
+                e.target.onerror = null;
+                e.target.src = currentCard?.flag;
+              }}
+              className="quiz-flag"
+              alt={currentCard?.flag_alt}
+            />
           ) : (
             ''
           )}

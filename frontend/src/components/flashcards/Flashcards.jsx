@@ -146,7 +146,6 @@ export const Flashcards = () => {
   // wait for data to load
   if (isLoading) return null;
 
-  console.log(cards.find((c) => c.country === 'Colombia'));
   return (
     <>
       <div className="flashcard-content d-flex justify-content-center align-items-center full-height bg-dark text-light">
@@ -221,7 +220,15 @@ export const Flashcards = () => {
                   </p>
 
                   <img
-                    src={activeCards[currentIndex]?.flag}
+                    src={
+                      activeCards[currentIndex]?.code
+                        ? `/flags/${activeCards[currentIndex].code.toLowerCase()}.svg`
+                        : activeCards[currentIndex]?.flag
+                    }
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src = activeCards[currentIndex]?.flag;
+                    }}
                     className="flag-label position-absolute"
                     alt={activeCards[currentIndex]?.flag_alt}
                   />
