@@ -220,11 +220,7 @@ export const Flashcards = () => {
                   </p>
 
                   <img
-                    src={
-                      activeCards[currentIndex]?.code
-                        ? `/flags/${activeCards[currentIndex].code.toLowerCase()}.svg`
-                        : activeCards[currentIndex]?.flag
-                    }
+                    src={`/flags/${activeCards[currentIndex].code.toLowerCase()}.svg`}
                     onError={(e) => {
                       e.target.onerror = null;
                       e.target.src = activeCards[currentIndex]?.flag;

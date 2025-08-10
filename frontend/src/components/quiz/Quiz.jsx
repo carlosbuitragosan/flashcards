@@ -22,6 +22,11 @@ export const Quiz = () => {
   // Current quiz card, based on current index
   const currentCard = quizDeck[quizIndex];
 
+  // Redirect if quiz deck is empty
+  useEffect(() => {
+    if (quizDeck.length === 0) navigate('/');
+  }, [quizDeck]);
+
   // When the current card changes, generate new answer options
   useEffect(() => {
     if (!currentCard) return;
@@ -78,11 +83,7 @@ export const Quiz = () => {
             <p className="mb-5">{currentCard?.capital}</p>
           ) : quizType === 'flags' ? (
             <img
-              src={
-                currentCard.code
-                  ? `/flags/${currentCard.code.toLowerCase()}.svg`
-                  : currentCard?.flag
-              }
+              src={`/flags/${currentCard.code.toLowerCase()}.svg`}
               onError={(e) => {
                 e.target.onerror = null;
                 e.target.src = currentCard?.flag;
