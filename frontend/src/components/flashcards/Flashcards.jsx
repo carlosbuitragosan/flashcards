@@ -27,7 +27,7 @@ export const Flashcards = () => {
     continents,
     setContinents,
     selectedContinentId,
-    setSelectedContinentId,
+    clearSelectedContinentId,
     currentIndex,
     setCurrentIndex,
     isFlipped,
@@ -64,7 +64,7 @@ export const Flashcards = () => {
 
         // This triggers the second useEffect below
         if (continentId === null) {
-          setSelectedContinentId(null);
+          clearSelectedContinentId();
         }
       } catch (err) {
         console.error('Error Loading continents: ', err);

@@ -12,6 +12,7 @@ export const Quiz = () => {
     setQuizIndex,
     quizType,
     setQuizType,
+    clearQuizType,
     endFocusMode,
   } = useFlashcardStore();
   // Store the shuffled answer options for the current question
@@ -55,7 +56,7 @@ export const Quiz = () => {
         navigate('/');
         // Reset index for future quizzes
         setQuizIndex(0);
-        setQuizType(null);
+        clearQuizType();
       } else {
         // Proceed to next question
         setQuizIndex(quizIndex + 1);

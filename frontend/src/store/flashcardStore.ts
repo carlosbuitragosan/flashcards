@@ -1,7 +1,8 @@
 import { use } from 'react';
 import { create } from 'zustand';
+import { Flashcard, FlashcardStore } from '@/types';
 
-export const shuffleArray = (arr) => {
+export const shuffleArray = <T>(arr: T[]): T[] => {
   const copy = [...arr];
 
   for (let i = copy.length - 1; i > 0; i--) {
@@ -11,7 +12,7 @@ export const shuffleArray = (arr) => {
   return copy;
 };
 
-export const useFlashcardStore = create((set, get) => ({
+export const useFlashcardStore = create<FlashcardStore>((set, get) => ({
   cards: [],
   setCards: (newCards) => set({ cards: newCards }),
 
@@ -20,6 +21,7 @@ export const useFlashcardStore = create((set, get) => ({
 
   selectedContinentId: null,
   setSelectedContinentId: (id) => set({ selectedContinentId: id }),
+  clearSelectedContinentId: () => set({ selectedContinentId: null }),
 
   currentIndex: 0,
   setCurrentIndex: (index) => set({ currentIndex: index }),
@@ -31,19 +33,20 @@ export const useFlashcardStore = create((set, get) => ({
   setHasShownEndingFocus: (value) => set({ hasShownEndingFocus: value }),
 
   disableSlide: false,
-  setDisableSlide: (value) => set({ disableSlide: value }),
+  setDisableSlide: (value: boolean) => set({ disableSlide: value }),
 
   focusCards: [],
   setFocusCards: (newCards) => set({ focusCards: newCards }),
 
-  focusProgress: {},
-
   isFocusMode: false,
-  setIsFocusMode: (value) => set({ isFocusMode: value }),
+  setIsFocusMode: (value: boolean) => set({ isFocusMode: value }),
 
+  // hide burger menu in mobile mode
   hideBurgerMenu: () => {
-    const menu = document.getElementById('navbarMenu');
-    const toggler = document.querySelector('.navbar-toggler');
+    const menu = document.getElementById('navbarMenu') as HTMLDivElement | null;
+    const toggler = document.querySelector(
+      '.navbar-toggler'
+    ) as HTMLButtonElement | null;
     if (
       menu &&
       toggler &&
@@ -85,7 +88,7 @@ export const useFlashcardStore = create((set, get) => ({
     const { hideBurgerMenu } = get();
     hideBurgerMenu();
     set({
-      focusCards: [],
+      focusCards: [] as Flashcard[],
       isFocusMode: false,
       hasShownEndingFocus: false,
       currentIndex: 0,
@@ -100,6 +103,7 @@ export const useFlashcardStore = create((set, get) => ({
 
   quizType: null,
   setQuizType: (value) => set({ quizType: value }),
+  clearQuizType: () => set({ quizType: null }),
 
   startQuiz: () => {
     const { focusCards } = get();
