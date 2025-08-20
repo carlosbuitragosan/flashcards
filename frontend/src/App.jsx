@@ -1,5 +1,4 @@
 import { Routes, Route } from 'react-router-dom';
-import { Slide, ToastContainer } from 'react-toastify';
 import { Flashcards } from './components/flashcards/Flashcards';
 import { Navbar } from './components/navbar/Navbar';
 import { Quiz } from './components/quiz/Quiz';

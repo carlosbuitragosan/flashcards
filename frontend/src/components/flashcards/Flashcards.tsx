@@ -2,14 +2,15 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSwipeable } from 'react-swipeable';
 import Confetti from 'react-confetti-boom';
-import { Modal } from 'bootstrap/dist/js/bootstrap.bundle.min';
+import  Modal  from 'bootstrap/js/dist/modal';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useFlashcardStore } from '../../store/flashcardStore';
 import {
   fetchAllFlashcards,
   fetchAllContinents,
   fetchCardsById,
-} from '../../api/flashcardService';
+} from '../../api/flashcardService'
+import type { QuizType } from '@/types';
 import './flashcards.css';
 
 export const Flashcards = () => {
@@ -49,7 +50,7 @@ export const Flashcards = () => {
   const activeCards = isFocusMode ? focusCards : cards;
 
   const showQuizModal = () => {
-    const quizModal = new Modal(document.getElementById('quizModal'));
+    const quizModal: Modal = new Modal(document.getElementById('quizModal') as HTMLDivElement);
     quizModal.show();
   };
 
@@ -138,7 +139,7 @@ export const Flashcards = () => {
     hideBurgerMenu();
   };
 
-  const handleStartQuiz = (quizType) => {
+  const handleStartQuiz = (quizType: QuizType) => {
     setQuizType(quizType);
     navigate('quiz');
     startQuiz();
@@ -222,8 +223,9 @@ export const Flashcards = () => {
                   <img
                     src={`/flags/${activeCards[currentIndex].code.toLowerCase()}.svg`}
                     onError={(e) => {
-                      e.target.onerror = null;
-                      e.target.src = activeCards[currentIndex]?.flag;
+                      const img = e.currentTarget;
+                      img.onerror = null;
+                      img.src = activeCards[currentIndex]?.flag;
                     }}
                     className="flag-label position-absolute"
                     alt={activeCards[currentIndex]?.flag_alt}
@@ -256,7 +258,7 @@ export const Flashcards = () => {
       <div
         className="modal fade"
         id="focusModal"
-        tabIndex="-1"
+        tabIndex={-1}
         aria-labelledby="focusModalLabel"
         aria-hidden="true"
       >
@@ -306,7 +308,7 @@ export const Flashcards = () => {
       <div
         className="modal fade"
         id="quizModal"
-        tabIndex="-1"
+        tabIndex={-1}
         aria-labelledby="focusModalLabel"
         aria-hidden="true"
       >

@@ -2,6 +2,8 @@ export interface Flashcard {
   id: number;
   country: string;
   code: string;
+  capital: string;
+  deck_id: number;
   flag: string;
   flag_alt: string;
   created_at: string;

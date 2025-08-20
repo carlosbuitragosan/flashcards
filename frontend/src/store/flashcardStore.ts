@@ -131,10 +131,10 @@ if (saved) {
 }
 
 // updates localStorage everytime any piece of the state bellow changes
-useFlashcardStore.subscribe((state) => {
+useFlashcardStore.subscribe((state: FlashcardStore) => {
   const { isFocusMode, cards, focusCards, currentIndex, selectedContinentId } =
     state;
-  const stateToPersist = {
+  const stateToPersist: PersistedState = {
     isFocusMode,
     currentIndex,
     selectedContinentId,
