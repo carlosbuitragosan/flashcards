@@ -113,11 +113,21 @@ export const useFlashcardStore = create<FlashcardStore>((set, get) => ({
 }));
 
 // ** LOCAL STORAGE **
+
+type PersistedState = {
+  isFocusMode: boolean;
+  currentIndex: number;
+  selectedContinentId: number | null;
+  cards?: Flashcard[];
+  focusCards?: Flashcard[];
+};
+
 // Restore state from localStorage
 const saved = localStorage.getItem('flashcardState');
 if (saved) {
+  const parsed = JSON.parse(saved) as PersistedState;
   // sets multiple values at once
-  useFlashcardStore.setState(JSON.parse(saved));
+  useFlashcardStore.setState(parsed);
 }
 
 // updates localStorage everytime any piece of the state bellow changes
