@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useFlashcardStore } from '../../store/flashcardStore';
 import { shuffleArray } from '../../store/flashcardStore';
 import './quiz.css';
+import { Flashcard } from '@/types';
 
 export const Quiz = () => {
   const navigate = useNavigate();
@@ -11,18 +12,17 @@ export const Quiz = () => {
     quizIndex,
     setQuizIndex,
     quizType,
-    setQuizType,
     clearQuizType,
     endFocusMode,
   } = useFlashcardStore();
   // Store the shuffled answer options for the current question
-  const [answerOptions, setAnswerOptions] = useState([]);
+  const [answerOptions, setAnswerOptions] = useState<Flashcard[]>([]);
   // Track the answer the user selected
-  const [selectedAnswerId, setSelectedAnswerId] = useState(null);
+  const [selectedAnswerId, setSelectedAnswerId] = useState<Flashcard['id'] | null>(null);
 
   // Current quiz card, based on current index
   const currentCard = quizDeck[quizIndex];
-
+      
   // Redirect if quiz deck is empty
   useEffect(() => {
     if (quizDeck.length === 0) navigate('/');
@@ -45,7 +45,7 @@ export const Quiz = () => {
     setSelectedAnswerId(null);
   }, [currentCard]);
 
-  const handleClick = (cardId) => {
+  const handleClick = (cardId: Flashcard['id']) => {
     // Track the selected answer
     setSelectedAnswerId(cardId);
     setTimeout(() => {
@@ -86,8 +86,9 @@ export const Quiz = () => {
             <img
               src={`/flags/${currentCard.code.toLowerCase()}.svg`}
               onError={(e) => {
-                e.target.onerror = null;
-                e.target.src = currentCard?.flag;
+                const img = e.currentTarget
+                img.onerror = null;
+                img.src = currentCard?.flag;
               }}
               className="quiz-flag"
               alt={currentCard?.flag_alt}
