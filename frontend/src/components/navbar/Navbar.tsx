@@ -1,5 +1,6 @@
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useFlashcardStore } from '../../store/flashcardStore';
+import { Continent } from '@/types';
 import './navbar.css';
 
 export const Navbar = () => {
@@ -35,7 +36,7 @@ export const Navbar = () => {
   };
 
   // Select cards from a specific region
-  const onSelectContinent = (id) => {
+  const onSelectContinent = (id: Continent['id'] | null) => {
     setSelectedContinentId(id);
     setCurrentIndex(0);
     //if currentIndex is already 0, the card needs to be flipped to the front
