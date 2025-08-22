@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSwipeable } from 'react-swipeable';
 import Confetti from 'react-confetti-boom';
-import  Modal  from 'bootstrap/js/dist/modal';
+import Modal from 'bootstrap/js/dist/modal';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useFlashcardStore } from '../../store/flashcardStore';
 import {
@@ -11,6 +11,7 @@ import {
   fetchCardsById,
 } from '../../api/flashcardService'
 import type { QuizType } from '@/types';
+import searchIcon from '@/assets/icons/search-icon.svg';
 import './flashcards.css';
 
 export const Flashcards = () => {
@@ -22,6 +23,7 @@ export const Flashcards = () => {
     'ontouchstart' in window || navigator.maxTouchPoints > 0;
 
   const [showConfetti, setShowConfetti] = useState(false);
+  const [showSearch, setShowSearch] = useState(false);
   const {
     cards,
     setCards,
@@ -149,6 +151,39 @@ export const Flashcards = () => {
 
   return (
     <>
+      <div className='d-flex searchBox-container justify-content-end'>
+        {!showSearch && (
+          <button className='btn ' onClick={() => setShowSearch(!showSearch)}>
+            <img src={searchIcon} alt='search' />
+          </button>
+        )}
+
+        <AnimatePresence initial={false}>
+        {showSearch && (
+          <motion.div
+          key='search'
+          className='overflow-hidden'
+          initial={{opacity: 0, width: 0}}
+          animate={{opacity: 1, width: 400}}
+          exit={{opacity: 0, width: 0}}
+          transition={{duration: 0.2}}
+          >
+          <div className='input-group'>
+            <span className='input-group-text'>
+              <img src={searchIcon} alt='search' />
+            </span>
+            <input 
+            type='text' 
+            className='form-control custom-search' 
+            placeholder='Search country...' 
+            autoFocus 
+            onBlur={() => setShowSearch(false)} 
+            />
+          </div>
+          </motion.div>
+        )}
+        </AnimatePresence>
+      </div>
       <div className="flashcard-content d-flex justify-content-center align-items-center full-height bg-dark text-light">
         <div className="card-wrapper position-relative d-flex flex-column justify-content-between ">
           {/* show tag for focus mode and No of cards left in session */}
@@ -200,8 +235,8 @@ export const Flashcards = () => {
                   <small className="deck-label position-absolute">
                     {activeCards[currentIndex]?.deck_id === selectedContinentId
                       ? continents.find(
-                          (cont) => cont.id === selectedContinentId
-                        )?.continent
+                        (cont) => cont.id === selectedContinentId
+                      )?.continent
                       : ''}
                   </small>
 
@@ -282,7 +317,7 @@ export const Flashcards = () => {
                 {selectedContinentId === null
                   ? 'All'
                   : continents.find((c) => c.id === selectedContinentId)
-                      ?.continent}
+                    ?.continent}
               </p>
             </div>
             <div className="modal-footer">

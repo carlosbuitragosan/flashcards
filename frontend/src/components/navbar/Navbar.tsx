@@ -2,6 +2,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { useFlashcardStore } from '../../store/flashcardStore';
 import { Continent } from '@/types';
 import './navbar.css';
+import { button } from 'framer-motion/client';
 
 export const Navbar = () => {
   const navigate = useNavigate();
@@ -165,6 +166,7 @@ export const Navbar = () => {
               </button>
             </li>
           )}
+
         </ul>
       </div>
     </nav>

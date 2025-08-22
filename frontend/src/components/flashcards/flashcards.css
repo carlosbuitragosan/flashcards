@@ -6,7 +6,7 @@ body {
 }
 
 .flashcard-content {
-  margin-top: 3rem;
+  margin-top: 1rem;
 }
 
 .card-wrapper {
@@ -85,8 +85,49 @@ body {
   display: none !important;
 }
 
+.input-group-text {
+  background-color: #212529;
+  border: none;
+  color: white;
+}
+
+.searchBox-container .input-group {
+  max-width: 400px;
+  padding: 1rem 1rem 0 0;
+}
+
+.searchBox-container .btn {
+  padding: 1rem 1rem 0 0;
+}
+
+.custom-search {
+  background-color: #212529;
+  color: white;
+  border: none;
+  border-radius: 0;
+  border-bottom: 1px solid #948d8d;
+  caret-color: #28b352;
+}
+
+.custom-search:focus {
+  background-color: transparent;
+  box-shadow: none;
+  outline: none;
+  border-bottom-color: #948d8d;
+  color: white;
+  font-weight: 100;
+}
+
+.custom-search::placeholder {
+  color: #948d8d;
+}
+
 @media screen and (min-width: 768px) {
   .full-height {
     height: var(--app-height);
+  }
+
+  .flashcard-content {
+    margin-top: 3rem;
   }
 }

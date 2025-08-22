@@ -41,6 +41,10 @@ export const useFlashcardStore = create<FlashcardStore>((set, get) => ({
   isFocusMode: false,
   setIsFocusMode: (value: boolean) => set({ isFocusMode: value }),
 
+  pendingLookupId: null,
+  setPendingLookupId: (id: Flashcard['id'] | null) =>
+    set({ pendingLookupId: id }),
+
   // hide burger menu in mobile mode
   hideBurgerMenu: () => {
     const menu = document.getElementById('navbarMenu') as HTMLDivElement | null;
