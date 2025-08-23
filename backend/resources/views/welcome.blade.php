@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Flashcards</title>
-  @vite(['src/main.jsx'])
+  @vite(['src/main.tsx'])
 
     {{-- PWA support --}}
   <link rel="manifest" href="/site.webmanifest" />
