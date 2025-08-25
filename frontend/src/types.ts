@@ -48,8 +48,9 @@ export interface FlashcardStore {
   isFocusMode: boolean;
   setIsFocusMode: (value: boolean) => void;
 
-  pendingLookupId: Flashcard['id'] | null;
-  setPendingLookupId: (id: Flashcard['id'] | null) => void;
+  lookupCardId: Flashcard['id'] | null;
+  setLookupCardId: (id: Flashcard['id'] | null) => void;
+  clearLookup: () => void;
 
   hideBurgerMenu: () => void;
   shuffleCards: () => void;

@@ -41,9 +41,9 @@ export const useFlashcardStore = create<FlashcardStore>((set, get) => ({
   isFocusMode: false,
   setIsFocusMode: (value: boolean) => set({ isFocusMode: value }),
 
-  pendingLookupId: null,
-  setPendingLookupId: (id: Flashcard['id'] | null) =>
-    set({ pendingLookupId: id }),
+  lookupCardId: null,
+  setLookupCardId: (id: Flashcard['id'] | null) => set({ lookupCardId: id }),
+  clearLookup: () => set({ lookupCardId: null }),
 
   // hide burger menu in mobile mode
   hideBurgerMenu: () => {

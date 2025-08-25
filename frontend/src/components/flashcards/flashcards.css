@@ -91,13 +91,16 @@ body {
   color: white;
 }
 
+.searchBox-container {
+  height: 48px; /* reserve space to avoid jerky movement of card  */
+}
 .searchBox-container .input-group {
   max-width: 400px;
   padding: 1rem 1rem 0 0;
 }
 
 .searchBox-container .btn {
-  padding: 1rem 1rem 0 0;
+  padding: 1rem 1.7rem 0 0;
 }
 
 .custom-search {
@@ -122,12 +125,27 @@ body {
   color: #948d8d;
 }
 
+.list-group-item {
+  background-color: #212529dd;
+  border: none;
+  color: white;
+  cursor: pointer;
+}
+
+/* search results - capitals */
+.text-muted {
+  color: white !important;
+}
 @media screen and (min-width: 768px) {
   .full-height {
     height: var(--app-height);
   }
 
   .flashcard-content {
-    margin-top: 3rem;
+    margin-top: -4rem;
+  }
+
+  .searchBox-container .input-group {
+    padding: 1rem 1rem 0 0;
   }
 }

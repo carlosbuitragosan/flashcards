@@ -1,16 +1,17 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSwipeable } from 'react-swipeable';
 import Confetti from 'react-confetti-boom';
 import Modal from 'bootstrap/js/dist/modal';
 import { motion, AnimatePresence } from 'framer-motion';
+import Fuse from 'fuse.js';
 import { useFlashcardStore } from '../../store/flashcardStore';
 import {
   fetchAllFlashcards,
   fetchAllContinents,
   fetchCardsById,
-} from '../../api/flashcardService'
-import type { QuizType } from '@/types';
+} from '../../api/flashcardService';
+import type { Flashcard, QuizType } from '@/types';
 import searchIcon from '@/assets/icons/search-icon.svg';
 import './flashcards.css';
 
@@ -24,6 +25,7 @@ export const Flashcards = () => {
 
   const [showConfetti, setShowConfetti] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
   const {
     cards,
     setCards,
@@ -46,13 +48,17 @@ export const Flashcards = () => {
     hideBurgerMenu,
     startQuiz,
     setQuizType,
+    lookupCardId,
+    setLookupCardId,
   } = useFlashcardStore();
 
   // displays cards conditionally
   const activeCards = isFocusMode ? focusCards : cards;
 
   const showQuizModal = () => {
-    const quizModal: Modal = new Modal(document.getElementById('quizModal') as HTMLDivElement);
+    const quizModal: Modal = new Modal(
+      document.getElementById('quizModal') as HTMLDivElement
+    );
     quizModal.show();
   };
 
@@ -146,44 +152,135 @@ export const Flashcards = () => {
     navigate('quiz');
     startQuiz();
   };
+
+  // Remove diacritics in string
+  const normaliseString = (text: string) =>
+    text
+      .normalize('NFD')
+      .replace(/\p{Diacritic}/gu, '')
+      .toLowerCase();
+
+  // Build Fuse index over normalised fields
+  const fuse = useMemo(() => {
+    const searchable = cards.map((card) => ({
+      card,
+      _countryNorm: normaliseString(card.country),
+      _capitalNorm: normaliseString(card.capital),
+    }));
+
+    return new Fuse(searchable, {
+      keys: ['_countryNorm', '_capitalNorm'],
+      threshold: 0.33, // <- lower = stricter
+      ignoreLocation: true, // <- ignore match by position
+      minMatchCharLength: 2,
+    });
+  }, [cards]);
+
+  // Return search result with 8 suggestions
+  const searchResults = useMemo(() => {
+    const query = normaliseString(searchQuery.trim());
+    if (!query) return [];
+
+    return fuse
+      .search(query)
+      .map((result) => result.item.card)
+      .slice(0, 8);
+  }, [searchQuery, fuse]);
+
+  // Add the lookup card to the cards array at index 0
+  useEffect(() => {
+    if (lookupCardId === null) return;
+
+    const loadCards = async () => {
+      const lookupCard = cards.find((card) => card.id === lookupCardId);
+      if (!lookupCard) {
+        setLookupCardId(null);
+        return;
+      }
+      const reorderedCards = [
+        lookupCard,
+        ...cards.filter((card) => card.id !== lookupCardId),
+      ];
+      setCards(reorderedCards);
+      setCurrentIndex(0);
+      setIsFlipped(false);
+      setLookupCardId(null);
+    };
+
+    loadCards();
+  }, [lookupCardId]);
+
   // wait for data to load
   if (isLoading) return null;
 
   return (
     <>
-      <div className='d-flex searchBox-container justify-content-end'>
-        {!showSearch && (
-          <button className='btn ' onClick={() => setShowSearch(!showSearch)}>
-            <img src={searchIcon} alt='search' />
-          </button>
-        )}
+      {!isFocusMode && (
+        <div className="searchBox-container d-flex justify-content-end">
+          {!showSearch && (
+            <button
+              className="btn "
+              onClick={() => {
+                clearSelectedContinentId();
+                setShowSearch(true);
+              }}
+            >
+              <img src={searchIcon} alt="search" />
+            </button>
+          )}
 
-        <AnimatePresence initial={false}>
-        {showSearch && (
-          <motion.div
-          key='search'
-          className='overflow-hidden'
-          initial={{opacity: 0, width: 0}}
-          animate={{opacity: 1, width: 400}}
-          exit={{opacity: 0, width: 0}}
-          transition={{duration: 0.2}}
-          >
-          <div className='input-group'>
-            <span className='input-group-text'>
-              <img src={searchIcon} alt='search' />
-            </span>
-            <input 
-            type='text' 
-            className='form-control custom-search' 
-            placeholder='Search country...' 
-            autoFocus 
-            onBlur={() => setShowSearch(false)} 
-            />
-          </div>
-          </motion.div>
-        )}
-        </AnimatePresence>
-      </div>
+          <AnimatePresence initial={false}>
+            {showSearch && (
+              <motion.div
+                key="search"
+                style={{ position: 'relative', zIndex: 1050 }}
+                initial={{ opacity: 0, width: 0 }}
+                animate={{ opacity: 1, width: 400 }}
+                exit={{ opacity: 0, width: 0 }}
+                transition={{ duration: 0.2 }}
+              >
+                <div className="input-group">
+                  <span className="input-group-text">
+                    <img src={searchIcon} alt="search" />
+                  </span>
+                  <input
+                    autoFocus
+                    className="form-control custom-search"
+                    placeholder="Search country or capital..."
+                    type="text"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    onBlur={() => {
+                      setShowSearch(false);
+                      setSearchQuery('');
+                    }}
+                  />
+                </div>
+
+                {/* display search results suggestions */}
+                {searchResults.length > 0 && (
+                  <ul className="list-group mt-2">
+                    {searchResults.map((card) => (
+                      <li
+                        key={card.id}
+                        className="list-group-item list-group-item-action"
+                        onMouseDown={() => {
+                          setLookupCardId(card.id);
+                          setShowSearch(false);
+                          setSearchQuery('');
+                        }}
+                      >
+                        {card.country}
+                        <small className="text-muted">- {card.capital}</small>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      )}
       <div className="flashcard-content d-flex justify-content-center align-items-center full-height bg-dark text-light">
         <div className="card-wrapper position-relative d-flex flex-column justify-content-between ">
           {/* show tag for focus mode and No of cards left in session */}
@@ -235,8 +332,8 @@ export const Flashcards = () => {
                   <small className="deck-label position-absolute">
                     {activeCards[currentIndex]?.deck_id === selectedContinentId
                       ? continents.find(
-                        (cont) => cont.id === selectedContinentId
-                      )?.continent
+                          (cont) => cont.id === selectedContinentId
+                        )?.continent
                       : ''}
                   </small>
 
@@ -317,7 +414,7 @@ export const Flashcards = () => {
                 {selectedContinentId === null
                   ? 'All'
                   : continents.find((c) => c.id === selectedContinentId)
-                    ?.continent}
+                      ?.continent}
               </p>
             </div>
             <div className="modal-footer">
